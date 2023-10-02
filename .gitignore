@@ -1,9 +1,11 @@
-.cache/*
-build/*
-!build/main.pdf
-
 .DS_Store
 Makefile
+
+.cache/*
+build/*
+
+!build/main.pdf
+indent.log
 
 compile_commands.json
 CMakeCache.txt
