@@ -1,5 +1,5 @@
-.cache/
-build/
+.cache/*
+build/*
 !build/main.pdf
 
 .DS_Store
@@ -7,7 +7,7 @@ Makefile
 
 compile_commands.json
 CMakeCache.txt
-.history/
+.history/*
 
 .vscode/*
 !.vscode/settings.json
