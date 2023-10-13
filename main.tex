@@ -9,7 +9,6 @@
 \pagestyle{normal}
 \onehalfspacing
 
-\title{A Practical and Analytical Comparison of Camera Calibration Methods}
 \providecommand{\wordcount}{222}
 
 % =================================================================================
@@ -34,12 +33,12 @@
         \vspace*{\fill}
 
         \rule{\linewidth}{1.5pt} \\ [0.5cm]
-        {\LARGE \bfseries \thetitle}
+        {\LARGE \bfseries Understanding and Applying the Fundamental Principles of Camera Calibration}
         \rule{\linewidth}{0.5pt} \\
 
         \vspace*{\fill}
 
-        \textbf{Research Question:} What are the most common methods of camera calibration,  and how do their practicality and accuracy compare when applied to the creation of 3D reconstructions of physical objects through the use of multiple images? \\ [1cm]
+        \textbf{Research Question:} What mathematical techniques can be employed to create precise camera models for accurately converting 2D image data into 3D point reconstructions, and what are their practical applications in real-world scenarios? \\ [1cm]
 
         \textbf{Word Count:} \wordcount \space words
 
@@ -59,13 +58,19 @@
 \pagenumbering{arabic}
 \setcounter{page}{1}
 
-\input{sections/1_intro}
-\input{sections/2_method}
-\input{sections/3_distortions}
-\input{sections/4_experiment}
+\input{sections/intro}
+\input{sections/model}
+\input{sections/projection}
+\input{sections/distortion}
+\input{sections/application}
 
 % ===========================================
-\clearpage
+
+\section*{Acknowledgements}
+\addcontentsline{toc}{section}{Acknowledgements}
+
+I am very grateful to my supervisor Mr. Hoteit for his continual guidance and invaluable pieces of advices during the process of writing this extended essay. I would also like to thank Aditya, for helping me with the creation of some diagrams used in this essay. 
+
 \printbibliography[heading=bibintoc]{}
 
 \end{document} % END
