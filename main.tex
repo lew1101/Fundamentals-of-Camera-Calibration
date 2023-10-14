@@ -1,4 +1,4 @@
-\documentclass[letter, 12pt, oneside]{article}
+\documentclass[12pt, oneside]{article}
 
 \usepackage{./texmf/preamble}
 % \usepackage{subfiles}
@@ -11,9 +11,9 @@
 
 \providecommand{\wordcount}{222}
 
-% =================================================================================
+% =================================================================
 % Content
-% =================================================================================
+% =================================================================
 
 \begin{document} % BEGIN
 \pagestyle{normal}
@@ -48,28 +48,28 @@
 
 \end{titlepage}
 
-% ===========================================
+% =================================================================
 \pagenumbering{roman}
 \thispagestyle{empty}
 \tableofcontents
-
-% ===========================================
+% =================================================================
 \clearpage
 \pagenumbering{arabic}
 \setcounter{page}{1}
 
 \input{sections/intro}
+\input{sections/literature}
 \input{sections/model}
-\input{sections/projection}
+\input{sections/intrinsics}
+\input{sections/extrinsics}
 \input{sections/distortion}
-\input{sections/application}
-
-% ===========================================
-
+\input{sections/projection}
+\input{sections/applications}
+% =================================================================
 \section*{Acknowledgements}
 \addcontentsline{toc}{section}{Acknowledgements}
 
-I am very grateful to my supervisor Mr. Hoteit for his continual guidance and invaluable pieces of advices during the process of writing this extended essay. I would also like to thank Aditya, for helping me with the creation of some diagrams used in this essay. 
+I am very grateful to my supervisor Mr. Hoteit for his continual guidance and invaluable pieces of advice during the process of writing this extended essay. I would also like to thank Aditya, for aiding me with the creation of some diagrams used in this essay. 
 
 \printbibliography[heading=bibintoc]{}
 
