@@ -1,12 +1,10 @@
 \documentclass[12pt, oneside]{article}
 
 \usepackage{./texmf/preamble}
-% \usepackage{subfiles}
 
 \graphicspath{{./assets/}}
-\addglobalbib{refs.bib}
+\addglobalbib{sources.bib}
 
-\pagestyle{normal}
 \onehalfspacing
 
 \providecommand{\wordcount}{222}
@@ -16,7 +14,7 @@
 % =================================================================
 
 \begin{document} % BEGIN
-\pagestyle{normal}
+\pagestyle{frontmatter}
 
 \begin{titlepage}
     \large
@@ -33,12 +31,12 @@
         \vspace*{\fill}
 
         \rule{\linewidth}{1.5pt} \\ [0.5cm]
-        {\LARGE \bfseries Understanding and Applying the Fundamental Principles of Camera Calibration}
+        {\LARGE \bfseries Mathematical Techniques and Applications of Camera Calibration }
         \rule{\linewidth}{0.5pt} \\
 
         \vspace*{\fill}
 
-        \textbf{Research Question:} What mathematical techniques can be employed to create precise camera models for accurately converting 2D image data into 3D point reconstructions, and what are their practical applications in real-world scenarios? \\ [1cm]
+        \textbf{Research Question:} What mathematical techniques can be employed to develop highly accurate camera models, and what are their real-world applications where these models prove valuable? \\ [1cm]
 
         \textbf{Word Count:} \wordcount \space words
 
@@ -50,27 +48,39 @@
 
 % =================================================================
 \pagenumbering{roman}
-\thispagestyle{empty}
 \tableofcontents
 % =================================================================
 \clearpage
+\pagestyle{mainmatter}
 \pagenumbering{arabic}
 \setcounter{page}{1}
 
 \input{sections/intro}
-\input{sections/literature}
+\input{sections/overview}
 \input{sections/model}
+\input{sections/prerequisites}
 \input{sections/intrinsics}
 \input{sections/extrinsics}
-\input{sections/distortion}
 \input{sections/projection}
+\input{sections/distortion}
 \input{sections/applications}
 % =================================================================
 \section*{Acknowledgements}
 \addcontentsline{toc}{section}{Acknowledgements}
 
-I am very grateful to my supervisor Mr. Hoteit for his continual guidance and invaluable pieces of advice during the process of writing this extended essay. I would also like to thank Aditya, for aiding me with the creation of some diagrams used in this essay. 
+I am very grateful to my supervisor Mr. Hoteit for his continual guidance and invaluable pieces of advice during the process of writing this extended essay. I would also like to thank Aditya, for aiding me with the creation of some diagrams used in this essay.
+
+\clearpage
 
 \printbibliography[heading=bibintoc]{}
+
+% =================================================================
+
+\clearpage
+
+\begin{appendices}
+    \pagestyle{appendices}
+    \input{sections/appendix/tait_bryan}
+\end{appendices}
 
 \end{document} % END

@@ -1,4 +1,4 @@
-\section{Putting It Together}
+\section{Constructing the Projection Matrix}
 \begin{equation}
     \vec{p}_{i_{(n)}} = \underbrace{M_{int}M_{ext}}_{=P}\vec{p}_{w_{(n)}}
 \end{equation}
@@ -28,10 +28,11 @@
     \end{bmatrix}
 \end{equation}
 
+
 \begin{align}
-        \widetilde{u}_n = p_{11}x_w^{(n)} + p_{12}y_w^{(n)} + p_{13}z_w^{(n)} + p_{14} \\
-        \widetilde{v}_n = p_{21}x_w^{(n)} + p_{22}y_w^{(n)} + p_{23}z_w^{(n)} + p_{24} \\
-        \widetilde{w}_n = p_{31}x_w^{(n)} + p_{32}y_w^{(n)} + p_{33}z_w^{(n)} + p_{34}
+    \widetilde{u}_n = p_{11}x_w^{(n)} + p_{12}y_w^{(n)} + p_{13}z_w^{(n)} + p_{14} \\
+    \widetilde{v}_n = p_{21}x_w^{(n)} + p_{22}y_w^{(n)} + p_{23}z_w^{(n)} + p_{24} \\
+    \widetilde{w}_n = p_{31}x_w^{(n)} + p_{32}y_w^{(n)} + p_{33}z_w^{(n)} + p_{34}
 \end{align}
 
 
@@ -51,7 +52,7 @@
 \end{align}
 
 \setcounter{MaxMatrixCols}{20}
-\begin{equation} 
+\begin{equation}
     \scalemath{0.9}{
         \begin{bmatrix}
             0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0
@@ -72,6 +73,21 @@
             \end{bmatrix}
         }_{=p}
     }
+\end{equation}
+
+We have now established a way to solve for the
+
+\begin{gather}
+    \min_{p} \quad \lVert Ap \rVert ^2 \quad \text{subject to} \quad \lVert p \rVert^2 = 1 \\
+\end{gather}
+
+
+\begin{equation}
+    \min_{p} \quad (p^T A^T Ap) \quad \text{subject to} \quad \lVert p \rVert^2 = 1
+\end{equation}
+
+\begin{equation}
+    L(p, \lambda) = \lVert Ap \rVert ^2 - \lambda \left( \Vert p \Vert^2 - 1 \right)
 \end{equation}
 
 
