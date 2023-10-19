@@ -1,8 +1,8 @@
-\section{Camera Model}
+\section{Camera Model} \label{sec:camera_model}
 
 A camera model is a projection model that approximates the function of a camera by describing a mathematical relationship between points in 3D space and its projection onto the sensor grid of the camera. In order to accurately model a camera, we must first understand the general workings of a camera.
 
-\begin{figure}[h!]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.5\textwidth]{images/lens_camera}
     \caption{Lens camera. Adapted from \cite{coltonPhysics1232012}} \label{fig:lens_camera}
@@ -13,7 +13,7 @@ Modern lens cameras are very complex, as they often contain a series of differen
 
 A pinhole camera is a simple camera without a lens. Instead, it relies on the use of a tiny hole as the aperture of the camera, and light rays pass through the hole, projecting an inverted image onto the
 
-\begin{figure}[h!]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.7\textwidth]{images/pinhole_vs_lens}
     \caption{Difference between a pinhole camera and a lens camera. Adapted from \cite{leCameraModel2018}}
@@ -32,7 +32,7 @@ Mathematically convenient acceptable approximation.
 
 The pinhole camera model does not accurately describe the true workings of a camera, as some of the  effects that the model fails to account for can be compensated the errors which results from these assumptions are sufficiently small to be neglected if a high quality camera is used. Additionally,
 
-\begin{figure}[h!]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{figures/imaging_model}
     \caption{Pinhole camera model.}
@@ -46,7 +46,7 @@ The pinhole camera model does not accurately describe the true workings of a cam
 For our camera model, we will establish 3 frames of
 
 
-\begin{figure}[h!]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{figures/coord_conversions}
     \caption{Coordinate remappings.}

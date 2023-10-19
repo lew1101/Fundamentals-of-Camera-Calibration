@@ -1,17 +1,18 @@
-\section{Constructing the Projection Matrix}
-\begin{equation}
-    \vec{p}_{i_{(n)}} = \underbrace{M_{int}M_{ext}}_{=P}\vec{p}_{w_{(n)}}
+\section{Determining the Projection Matrix}
+Combining the equations $p_c = M_{ext}\:p_w$ and $p_i = M_{int}\:p_c$, we obtain the equation \ref{eq:combined}:
+\begin{equation} \label{eq:combined}
+    \widetilde{p}_{i} = M_{int}\:M_{ext}\:\widetilde{p}_{w} = P\:\widetilde{p}_{w}
 \end{equation}
 
 \begin{equation}
     \begin{bmatrix}
         u_n \\ v_n \\ 1
     \end{bmatrix}
-    \cong
+    \equiv
     \begin{bmatrix}
         \widetilde{w}_n u_n \\ \widetilde{w}_n v_n \\ \widetilde{w}_n
     \end{bmatrix}
-    =
+    \equiv
     \begin{bmatrix}
         \widetilde{u}_n \\ \widetilde{v}_n \\ \widetilde{w}_n
     \end{bmatrix}
@@ -22,74 +23,110 @@
             p_{21} & p_{22} & p_{23} & p_{24} \\
             p_{31} & p_{32} & p_{33} & p_{34}
         \end{bmatrix}
-    }_{=P}
+    }_{\mathlarger{=P}}
     \begin{bmatrix}
         x_w^{(n)} \\ y_w^{(n)} \\ z_w^{(n)} \\ 1
     \end{bmatrix}
 \end{equation}
 
 
-\begin{align}
+\begin{align*}
     \widetilde{u}_n = p_{11}x_w^{(n)} + p_{12}y_w^{(n)} + p_{13}z_w^{(n)} + p_{14} \\
     \widetilde{v}_n = p_{21}x_w^{(n)} + p_{22}y_w^{(n)} + p_{23}z_w^{(n)} + p_{24} \\
     \widetilde{w}_n = p_{31}x_w^{(n)} + p_{32}y_w^{(n)} + p_{33}z_w^{(n)} + p_{34}
-\end{align}
+\end{align*}
 
-
-\begin{align}
+\begin{align*}
     u_n = \frac{\widetilde{u}_n}{\widetilde{w}_n} & = \frac{p_{11}x_w^{(n)} + p_{12}y_w^{(n)} + p_{13}z_w^{(n)} + p_{14}}{p_{31}x_w^{(n)} + p_{32}y_w^{(n)} + p_{33}z_w^{(n)} + p_{34}} \\
     v_n = \frac{\widetilde{v}_n}{\widetilde{w}_n} & = \frac{p_{21}x_w^{(n)} + p_{22}y_w^{(n)} + p_{23}z_w^{(n)} + p_{24}}{p_{31}x_w^{(n)} + p_{32}y_w^{(n)} + p_{33}z_w^{(n)} + p_{34}}
-\end{align}
+\end{align*}
 
-\begin{align}
+\begin{align*}
     u_n(p_{31}x_w^{(n)} + p_{32}y_w^{(n)} + p_{33}z_w^{(n)} + p_{34}) & = p_{11}x_w^{(n)} + p_{12}y_w^{(n)} + p_{13}z_w^{(n)} + p_{14} \\
     v_n(p_{31}x_w^{(n)} + p_{32}y_w^{(n)} + p_{33}z_w^{(n)} + p_{34}) & = p_{21}x_w^{(n)} + p_{22}y_w^{(n)} + p_{23}z_w^{(n)} + p_{24}
-\end{align}
+\end{align*}
 
-\begin{align}
-    0 & = p_{11}x_w^{(n)} + p_{12}y_w^{(n)} + p_{13}z_w^{(n)} + p_{14} - p_{31}u_nx_w^{(n)} - p_{32}u_ny_w^{(n)} - p_{33}u_nz_w^{(n)} - p_{34}u_n \\
-    0 & = p_{21}x_w^{(n)} + p_{22}y_w^{(n)} + p_{23}z_w^{(n)} + p_{24} - p_{31}v_nx_w^{(n)} - p_{32}v_ny_w^{(n)} - p_{33}v_nz_w^{(n)} - p_{34}v_n
-\end{align}
+\begin{subequations}
+    \begin{align}
+        0 & = p_{11}x_w^{(n)} + p_{12}y_w^{(n)} + p_{13}z_w^{(n)} + p_{14} - p_{31}u_nx_w^{(n)} - p_{32}u_ny_w^{(n)} - p_{33}u_nz_w^{(n)} - p_{34}u_n \\
+        0 & = p_{21}x_w^{(n)} + p_{22}y_w^{(n)} + p_{23}z_w^{(n)} + p_{24} - p_{31}v_nx_w^{(n)} - p_{32}v_ny_w^{(n)} - p_{33}v_nz_w^{(n)} - p_{34}v_n
+    \end{align}
+\end{subequations}
+
 
 \setcounter{MaxMatrixCols}{20}
 \begin{equation}
     \scalemath{0.9}{
+    \begin{bmatrix}
+        0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0
+    \end{bmatrix}
+    =
+    \underbrace{
+        \begin{blockarray}{[*{12}c]}
+            x_w^{(1)} & y_w^{(1)} & z_w^{(1)} & 1 & 0         & 0         & 0         & 0 & -u_nx_w^{(1)} & -u_ny_w^{(1)} & -u_nz_w^{(1)} & -u_1 \\
+            0         & 0         & 0         & 0 & x_w^{(1)} & y_w^{(1)} & z_w^{(1)} & 1 & -v_nx_w^{(1)} & -v_ny_w^{(1)} & -v_nz_w^{(1)} & -v_1 \\
+            \BAmulticolumn{6}{c}{\vdots} & \BAmulticolumn{6}{c}{\vdots} \\
+            x_w^{(n)} & y_w^{(n)} & z_w^{(n)} & 1 & 0         & 0         & 0         & 0 & -u_nx_w^{(n)} & -u_ny_w^{(n)} & -u_nz_w^{(n)} & -u_n \\
+            0         & 0         & 0         & 0 & x_w^{(n)} & y_w^{(n)} & z_w^{(n)} & 1 & -v_nx_w^{(n)} & -v_ny_w^{(n)} & -v_nz_w^{(n)} & -v_n
+        \end{blockarray}
+    }_{\mathlarger{=A}}
+    \underbrace{
         \begin{bmatrix}
-            0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0
+            p_{11} \\ p_{12} \\ p_{13} \\ p_{14} \\ p_{21} \\ p_{22} \\ p_{23} \\ p_{24} \\ p_{31} \\ p_{32} \\ p_{33} \\ p_{34}
         \end{bmatrix}
-        =
-        \underbrace{
-            \begin{blockarray}{[*{12}c]}
-                x_w^{(1)} & y_w^{(1)} & z_w^{(1)} & 1 & 0         & 0         & 0         & 0 & -u_nx_w^{(1)} & -u_ny_w^{(1)} & -u_nz_w^{(1)} & -u_1 \\
-                0         & 0         & 0         & 0 & x_w^{(1)} & y_w^{(1)} & z_w^{(1)} & 1 & -v_nx_w^{(1)} & -v_ny_w^{(1)} & -v_nz_w^{(1)} & -v_1 \\
-                \BAmulticolumn{6}{c}{\vdots} & \BAmulticolumn{6}{c}{\vdots} \\
-                x_w^{(n)} & y_w^{(n)} & z_w^{(n)} & 1 & 0         & 0         & 0         & 0 & -u_nx_w^{(n)} & -u_ny_w^{(n)} & -u_nz_w^{(n)} & -u_n \\
-                0         & 0         & 0         & 0 & x_w^{(n)} & y_w^{(n)} & z_w^{(n)} & 1 & -v_nx_w^{(n)} & -v_ny_w^{(n)} & -v_nz_w^{(n)} & -v_n
-            \end{blockarray}
-        }_{=A}
-        \underbrace{
-            \begin{bmatrix}
-                p_{11} \\ p_{12} \\ p_{13} \\ p_{14} \\ p_{21} \\ p_{22} \\ p_{23} \\ p_{24} \\ p_{31} \\ p_{32} \\ p_{33} \\ p_{34}
-            \end{bmatrix}
-        }_{=p}
+    }_{\mathlarger{=p}}
     }
 \end{equation}
 
+\subsection{Constrained Least Squares Solution}
+
 We have now established a way to solve for the
 
-\begin{gather}
-    \min_{p} \quad \lVert Ap \rVert ^2 \quad \text{subject to} \quad \lVert p \rVert^2 = 1 \\
-\end{gather}
-
-
+Now, we need to solve for $Ap = 0$
+\begin{equation} \label{eq:min1}
+    \min_{p}\:\: \lVert Ap \rVert^2  \quad \text{subject to} \quad \lVert p \rVert^2 = 1
+\end{equation}
+For a given arbitrary vector $v \in \mathbb{R}^n$, the magnitude of the vector, $\Vert v \Vert$, is equal to
+$\sqrt{v_1^2+v_2^2+ \cdots + v_n^2}$. As such, we can rewrite the square of the magnitude of vector, $\Vert v \Vert ^2$, as:
+\begin{equation*} 
+    \Vert v \Vert^2 
+    = v_1^2+v_2^2+ \cdots v_n^2 
+    = 
+    \begin{bmatrix}
+        v_1 & v_2 & \cdots & v_n     
+    \end{bmatrix}
+    \begin{bmatrix}
+        v_1 \\ v_2 \\ \vdots \\ v_n
+    \end{bmatrix}
+    = v^T v
+\end{equation*} 
+Thus, we can replace $\Vert Ap \Vert ^2$ and $\Vert p \Vert ^2$ in \ref{eq:min1} for $p^T A^T Ap$ and $p^T p$ respectively to obtain \ref{eq:min2}. 
+\begin{equation} \label{eq:min2}
+    \min_{p}\:\: \left(p^T A^T Ap\right)\quad \text{subject to} \quad p^T p = 1
+\end{equation} 
+We can define the loss function:
 \begin{equation}
-    \min_{p} \quad (p^T A^T Ap) \quad \text{subject to} \quad \lVert p \rVert^2 = 1
+    L(p, \lambda) = p^T A^T Ap - \lambda \left( p^T p - 1 \right)
 \end{equation}
 
+To find the values of vector $p$ such that the $L(p,\lambda)$, we find when derivative of the function with respect to $p$, and find when the derivative is 0.
+
+\begin{align}
+    \begin{split}
+        \frac{d}{dp}L(p,\lambda) &= \frac{d}{dp} \left[ p^T A^T Ap - \lambda \left( p^T p - 1 \right) \right] \\
+        &= 2A^TAp - 2 \lambda p \equiv 0
+    \end{split}
+\end{align}
 \begin{equation}
-    L(p, \lambda) = \lVert Ap \rVert ^2 - \lambda \left( \Vert p \Vert^2 - 1 \right)
+    \Rightarrow A^T A p = \lambda p \label{eq:eigen}
 \end{equation}
 
+Equation \ref{eq:eigen} in fact takes the form of the well-known eigenvalue problem.  which states that for a given matrix $M \in \mathbb{R}^{n \times n}$, determine the eigenvector $x \in \mathbb{R}^n, x \neq 0$ and the eigenvalue $\lambda \in \mathbb{C}$ such that:
+\begin{equation*}
+    Mx = \lambda x
+\end{equation*}
+
+As such, we can reframe our problem as finding the eigenvector $p$ with the smallest $\lambda$ of the matrix $A^TA$ which minimizes the loss function $L(p,\lambda)$
 
 
 

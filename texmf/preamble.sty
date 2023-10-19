@@ -10,24 +10,11 @@
     includeheadfoot
 ]{geometry}
 \usepackage[
-    shortfirst, 
-    ibid=true, 
+    shortfirst,
+    ibid=true,
     style=windycity,
-     backend=bibtex
-     ]{biblatex}
-\usepackage[hidelinks]{hyperref}
-\usepackage{fancyhdr}
-\usepackage[indent]{parskip}
-\usepackage{titling}
-\usepackage{lastpage}
-\usepackage{float}
-\usepackage{
-    graphicx, 
-    wrapfig, 
-    subcaption, 
-    setspace, 
-    booktabs}
-    
+    backend=bibtex
+]{biblatex}
 \usepackage[
     format=hang,
     font=small,
@@ -36,16 +23,31 @@
     tablewithin=section
 ]{caption}
 \usepackage[protrusion=true, expansion=true]{microtype}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[indent]{parskip}
+\usepackage{lastpage}
+\usepackage{subcaption}
+\usepackage{setspace}
 \usepackage[titletoc, title]{appendix}
 \usepackage{sectsty}
-\usepackage{icomma}
-\usepackage{csquotes}
-\usepackage{siunitx}
+\usepackage{titling}
 \usepackage{ragged2e}
+
+\usepackage{graphicx}
+\usepackage{csquotes}
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage{wrapfig}
+
+\usepackage{icomma}
 \usepackage{mathtools}
+\usepackage{amssymb}
+\usepackage{siunitx}
 \usepackage{blkarray}
 \usepackage{enumerate}
 \usepackage{optidef}
+\usepackage{relsize}
 
 % ======================================
 % Page Styles
@@ -60,19 +62,22 @@
 
 \fancypagestyle{mainmatter}{
     \fancyhf{}
+    \fancyhead[L]{\footnotesize\slshape\scshape\nouppercase{Section \leftmark}}
+    \fancyhead[R]{\normalsize\thepage}
+}
+
+\fancypagestyle{backmatter}{
+    \pagestyle{mainmatter}
     \fancyhead[L]{\footnotesize\slshape\scshape\nouppercase{\leftmark}}
-    \fancyfoot[C]{\thepage}
 }
 
 \fancypagestyle{appendices}{
-    \pagestyle{mainmatter}
+    \fancyhead[L]{\footnotesize\slshape\scshape\nouppercase{Appendix \leftmark}}
 }
-
 
 \setlength{\jot}{1.5ex}
 \setstretch{1.5}
 \numberwithin{equation}{section}
-
 
 % ======================================
 % Custom Commands
