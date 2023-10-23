@@ -1,7 +1,11 @@
-\section{Intrinsic Parameters} \label{sec:intrinsics}
-Now, we would like to find the intrinsic matrix, $M_{int}$, which relates the positional vector $\vec{p}_c$ of point $P$ in the camera coordinate frame, to its positional vector $\vec{p}_i$ on the image plane. Using $\widetilde{p}_c$ and $\widetilde{p}_i$ to represent the homogenous coordinates of the vectors $\vec{p}_c$ and $\vec{p}_i$ respectively, we can express this mathematically as follows:
-\begin{equation}
-    \widetilde{p}_i =  M_{ext}\:\widetilde{p}_c
+\section{Perspective Projection} \label{sec:intrinsics}
+
+
+
+
+Next, we would like to find the intrinsic matrix, $M_{int}$, which relates the positional vector $\vec{p}_c$ of point $P$ in the camera coordinate frame, to its positional vector $\vec{p}_i$ on the image plane. Using $\widetilde{p}_c$ and $\widetilde{p}_i$ to represent the homogenous coordinates of the vectors $\vec{p}_c$ and $\vec{p}_i$ respectively, we can express this mathematically as follows:
+\begin{equation} \label{eq:pi}
+    \widetilde{p}_i =  M_{ext}\,\widetilde{p}_c
 \end{equation}
 
 
@@ -24,26 +28,22 @@ Now, we would like to find the intrinsic matrix, $M_{int}$, which relates the po
     \end{gather}
 \end{subequations}
 
-We can then relate the coordinates of the projection, $(x_i, y_i)$, which are in real-world units, to its position $(u, v)$ in pixels. 
+We can then relate the coordinates of the projection, $(x_i, y_i)$, which are in real-world units, to its position $(u, v)$ in pixels.
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{figures/sensor_grid}
     \caption{Conversion from image plane coordinates to sensor grid coordinates}
 \end{figure}
 Let $m_x$ and $m_y$ represent the pixel density of the image sensor in the $x$ and $y$ axes of the image sensor plane respectively.
-\begin{subequations}
-    \begin{align}
-        u = m_x x_i + c_x \\
-        v = m_y y_i + c_y 
-    \end{align}
-\end{subequations}
-
+\begin{align*}
+    u = m_x x_i + c_x \\
+    v = m_y y_i + c_y
+\end{align*}
 Replacing $x_i$ and $y_i$ for the result we obtained from \ref{subeq:xi_result} and \ref{subeq:yi_result}, we get:
 \begin{align*}
     u = m_x f \frac{x_c}{z_c} + c_x \\
     v = m_y f \frac{y_c}{z_c} + c_y
 \end{align*}
-
 Since $m_x$, $m_y$, and $f$ are all unknowns, we can combine the products $m_x f$ and $m_y f$ to $f_x$ and $f_y$ respectively. Under this new scheme, we define $f_x$ and $f_y$ as the horizontal and vertical focal lengths of camera.
 \begin{subequations}
     \begin{gather}
@@ -52,13 +52,13 @@ Since $m_x$, $m_y$, and $f$ are all unknowns, we can combine the products $m_x f
     \end{gather}
 \end{subequations}
 
-We can linearize
+\subsection{Intrinsic Matrix}
 
 \begin{equation}
     \begin{bmatrix}
-        u \\ v \\ 1
+        u \\ v
     \end{bmatrix}
-    \equiv
+    \sim
     \begin{bmatrix}
         \widetilde{u} \\ \widetilde{v} \\ \widetilde{w}
     \end{bmatrix}
@@ -77,8 +77,26 @@ We can linearize
             0   & f_y & c_y & 0 \\
             0   & 0   & 1   & 0
         \end{bmatrix}
-    }_{\mathlarger{=M_{int}}}
+    }_{\mathlarger{M_{int}}}
     \begin{bmatrix}
         x_c \\ y_c \\ z_c \\ 1
     \end{bmatrix}
+\end{equation}
+
+
+\begin{equation}
+    K =
+    \begin{bmatrix}
+        f_x & 0   & c_x \\
+        0   & f_y & c_y \\
+        0   & 0   & 1
+    \end{bmatrix}
+\end{equation}
+
+Note that $K$ that is an \emph{upper triangular matrix}. It is a special kind of square matrix with all of its non-zero entries above the main diagonal. This is an important property which we will exploit when extracting the intrinsic matrix from the projection matrix in section \ref{sec:projection}.
+
+As such, we can express $M_{int}$ as $\left[\: K \:\vert\: 0 \:\right]$.
+
+\begin{equation}
+    M_{int} = \left[\: K \:\vert\: 0 \:\right]
 \end{equation}

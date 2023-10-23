@@ -7,7 +7,9 @@
 
 \onehalfspacing
 
-\providecommand{\wordcount}{222}
+\immediate\write18{texcount -merge \jobname.tex | sed -n 's/.*Words in text://p' | awk '{$1=$1};1' > 'count.txt'}
+
+\providecommand{\totalwordcount}{\input{count.txt}}
 
 % =================================================================
 % Content
@@ -38,7 +40,7 @@
 
         \textbf{Research Question:} What mathematical techniques can be employed to develop highly accurate camera models, and what are their real-world applications where these models prove valuable? \\ [1cm]
 
-        \textbf{Word Count:} \wordcount \space words
+        \textbf{Word Count:} \totalwordcount words
 
         \vspace*{2cm}
 
@@ -56,19 +58,21 @@
 \setcounter{page}{1}
 
 \input{sections/intro}
-\input{sections/overview}
 \input{sections/model}
 \input{sections/prerequisites}
-\input{sections/intrinsics}
 \input{sections/extrinsics}
+\input{sections/intrinsics}
 \input{sections/projection}
-\input{sections/distortion}
+\input{sections/extract}
+\input{sections/experimental.tex}
 \input{sections/applications}
 % =================================================================
+
+%TC:ignore
 \section*{Acknowledgements}
 \addcontentsline{toc}{section}{Acknowledgements}
 
-I am very grateful to my supervisor Mr. Hoteit for his continual guidance and invaluable pieces of advice during the process of writing this extended essay. I would also like to thank Aditya, for aiding me with the creation of some diagrams used in this essay.
+I am very grateful to my supervisor Mr. Hoteit for his continual guidance and invaluable pieces of advice during the process of writing this extended essay. I would also like to thank Aditya, for aiding me with the creation of some diagrams used.
 
 \clearpage
 \pagestyle{backmatter}
@@ -80,8 +84,12 @@ I am very grateful to my supervisor Mr. Hoteit for his continual guidance and in
 \clearpage
 \begin{appendices}
     \pagestyle{appendices}
+    \input{sections/appendix/data}
+    \input{sections/appendix/partial}
+    \input{sections/appendix/lagrangian}
     \input{sections/appendix/eigenvector}
-    \input{sections/appendix/tait_bryan}
 \end{appendices}
+%TC:endignore
 
 \end{document} % END
+

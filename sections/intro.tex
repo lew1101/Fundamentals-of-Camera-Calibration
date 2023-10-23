@@ -1,6 +1,10 @@
 \section{Introduction}
 
-Camera calibration is an important process in computer vision and computer graphics which involves determining the parameters of a camera. The knowledge of these parameters are essential, because it allows us to create a mathematical model which accurately describes the camera. Without a well-calibrated camera, images captured may suffer from inaccuracies and distortion, making calibration an indispensable step in a wide array of applications.
+Camera calibration, also known as camera resectioning, is the process of determining the intrinsic and extrinsic parameters of a camera. The knowledge of the accurate values of these values parameters are essential, as it enables us to create a mathematical model which describes how a camera projects 3D points from a scene onto the 2D image it captures. The intrinsic parameters deal with the camera's internal characteristics, while the extrinsic parameters describe its position and orientation in the world. The importance of a well-calibrated camera becomes very apparent in photogrammetric applications, where precise measurements of 3-dimensional physical objects are derived from photographic images.
+
+Photogrammetry, as a comprehensive science in its own right, concerns itself with obtaining accurate measurements of 3-dimensional physical objects through photographic imagery. Photogrammetry was first employed by Prussian architect Albrecht Meydenbauer in the 1860s, who used photogrammetric techniques to create some of the most detailed topographic plans and elevations drawings \footcite[][1]{albertzLookBack2007}. Today, photogrammetric techniques are used in a multitude of applications spanning diverse fields, including but not limited to: computer vision, topographical mapping, medical imaging, and forensic analysis. 
+
+While camera calibration is essential in ensuring the accuracy of photogrammetric applications, it itself also relies on these very same photogrammetric techniques in order to estimate these parameters. This underscores the essential relationship between photogrammetry and camera calibration. In essence, the developments of photogrammetry and camera calibration are closely intertwined, and this shows the importance of understanding and accurately determining a camera's intrinsic and extrinsic parameters for various applications.
 
 \subsection{Problem Statement}
 
@@ -8,12 +12,11 @@ While manufacturers of cameras often report parameters of cameras, such as the n
 
 Camera calibration emerges as the answer to these problems, allowing us to create very accurate estimates for the parameters of a camera. As such, it is important that we ac
 
-Photogrammetry, as a comprehensive science, concerns itself with obtaining precise measurements of 3-dimensional physical objects from photographic images. 
+ 
 
-It was first employed by Prussian architect Albrecht Meydenbauer in the 1860s, who used photogrammetric techniques to create some of the most detailed topographic plans and elevations drawings \footcite{albertzLookBack2007}. 
-Camera calibration borrows techniques from photogrammetry  
 
-Today, photogrammetric techniques are used in a multitude of applications spanning diverse fields, including computer vision, topographical mapping, medical imaging, and forensic analysis. 
+
+
 
 
 

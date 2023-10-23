@@ -1,6 +1,10 @@
-\section{Camera Model} \label{sec:camera_model}
+\section{Approach} 
+
+\subsection{Camera Model} \label{sec:camera_model}
 
 A camera model is a projection model that approximates the function of a camera by describing a mathematical relationship between points in 3D space and its projection onto the sensor grid of the camera. In order to accurately model a camera, we must first understand the general workings of a camera.
+
+Modern lens cameras are highly sophisticated, built with an array of complex mechanisms and a wide range of features. The complexity of cameras can be better understood by breaking down their components down into three main elements critical to image projection: the lens, the aperture, and the sensor grid (CCD). 
 
 \begin{figure}[H]
     \centering
@@ -8,8 +12,12 @@ A camera model is a projection model that approximates the function of a camera 
     \caption{Lens camera. Adapted from \cite{coltonPhysics1232012}} \label{fig:lens_camera}
 \end{figure}
 
+The lenses 
 
-Modern lens cameras are very complex, as they often contain a series of different shaped lenses. This is an effort to compensate for other undesired effects, such as common phenomenon where the image quality in the center of the camera is better than the edges of image, due to the curvature of the lens. Additionally, they contain various intricate mechanisms, such as the ability to zoom the camera and other features to alter the image output. However, we can simplify the model of the lens camera by collapsing the mechanisms of the camera into 3 main functional components that are important to the image projection: the lens, the aperture, and the sensor grid (CCD). This simplified model is visualized in Figure \ref{fig:lens_camera}. The lens focuses incoming light rays towards the aperture, before they project inverted onto the sensor grid. However, even this simplified model of a lens camera is too complex to model, as there is no simple mathematical equation which accurately describes the behavior of a lens. As such, we can further simplify our camera model by building upon the pinhole camera model, which is one of the simplest and most commonly used camera models in camera calibration.
+
+However, we can simplify the model of the lens camera by collapsing the mechanisms of the camera into 3 main functional components that are important to the image projection: the lens, the aperture, and the sensor grid (CCD). This simplified model is visualized in Figure \ref{fig:lens_camera}. The lens focuses incoming light rays towards the aperture, before they project inverted onto the sensor grid. However, even this simplified model of a lens camera is too complex to model, as there is no simple mathematical equation which accurately describes the behavior of a lens. As such, we can further simplify our camera model by building upon the pinhole camera model, which is one of the simplest and most commonly used camera models in camera calibration.
+
+
 
 A pinhole camera is a simple camera without a lens. Instead, it relies on the use of a tiny hole as the aperture of the camera, and light rays pass through the hole, projecting an inverted image onto the
 
@@ -38,9 +46,7 @@ The pinhole camera model does not accurately describe the true workings of a cam
     \caption{Pinhole camera model.}
 \end{figure}
 
-\subsection{Straetgy}
-
-\subsection{Nomenclature}
+\subsubsection{Geometry}
 
 
 For our camera model, we will establish 3 frames of
@@ -53,4 +59,16 @@ For our camera model, we will establish 3 frames of
 \end{figure}
 
 
+
+
+
+There are countless different approaches one could take to calibrate a camera, 
+
+
+
+however they all build upon techniques first described in multiple highly influential papers, most notably Tsai's ``A Versatile Camera Calibration Technique for High-Accuracy 3D Machine Vision Metrology Using Off-the-shelf TV Cameras and Lenses'' and Zhang's ``A Flexible New Technique for Camera Calibration''. 
+
+\subsection{Calibration Object}
+
+Calibration techniques can be roughly separated into 3 categories, based on the dimension of the calibration object used \footcite{zhangCameraCalibration2007}:
 

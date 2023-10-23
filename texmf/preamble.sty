@@ -44,10 +44,14 @@
 \usepackage{mathtools}
 \usepackage{amssymb}
 \usepackage{siunitx}
+\usepackage{array}
 \usepackage{blkarray}
-\usepackage{enumerate}
+\usepackage{enumitem}
 \usepackage{optidef}
 \usepackage{relsize}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{longtable}
 
 % ======================================
 % Page Styles
@@ -76,6 +80,9 @@
 }
 
 \setlength{\jot}{1.5ex}
+\setlength{\headheight}{14.5pt}
+\setlength\tabcolsep{4pt} % default value: 6pt
+
 \setstretch{1.5}
 \numberwithin{equation}{section}
 
@@ -83,9 +90,20 @@
 % Custom Commands
 % ======================================
 
-\newcommand\scalemath[2]{\scalebox{#1}{\mbox{\ensuremath{\displaystyle #2}}}}
+\DeclareSIUnit{\pixel}{px}
+
+\newcommand{\scalemath}[2]{\scalebox{#1}{\mbox{\ensuremath{\displaystyle #2}}}}
 
 \newenvironment{system}
 {\left\lbrace\begin{array}{@{}l@{}}}
         {\end{array}\right.}
 
+\newcommand{\seteq}{\stackrel{\mathclap{\mbox{\normalfont\scriptsize set}}}{=}}
+
+\newcommand{\optmin}[3]{\underset{#1}{\text{minimize}}\enspace #2 \enspace \text{subject to} \enspace  #3}
+
+\newcommand{\T}{\mathsf{T}}
+
+\newcommand{\dss}{\displaystyle}
+
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}

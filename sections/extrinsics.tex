@@ -1,8 +1,10 @@
-\section{Extrinsic Parameters} \label{sec:extrinsics}
+\section{Coordinate Transformation} \label{sec:extrinsics}
 
-Next, we would like to find the extrinsic matrix, $M_{ext}$, which relates the positional vector $\vec{p}_w$ of point $P$ in the world coordinate frame, to its positional vector $\vec{p}_c$ in the camera coordinate frame. Similar to what we did in section \ref{sec:intrinsics}, we can express this in homogenous coordinates as follows:
-\begin{equation}
-    \widetilde{p}_c =  M_{ext}\:\widetilde{p}_w
+First, we 
+
+Now, we would like to find the extrinsic matrix, $M_{ext}$, which relates the positional vector $\vec{p}_w$ of point $P$ in the world coordinate frame, to its positional vector $\vec{p}_c$ in the camera coordinate frame. Similar to what we did in section \ref{sec:intrinsics}, we can express this in homogenous coordinates as follows:
+\begin{equation} \label{eq:pc}
+    \widetilde{p}_c =  M_{ext}\,\widetilde{p}_w
 \end{equation}
 
 \begin{figure}[H]
@@ -10,6 +12,8 @@ Next, we would like to find the extrinsic matrix, $M_{ext}$, which relates the p
     \includegraphics[width=0.9\textwidth]{figures/coord_transform}
     \caption{Coordinate transformation from the world coordinate frame to the camera frame.}
 \end{figure}
+
+\subsection{Extrinsic Matrix}
 
 For the extrinsic parameters of the camera, we have the position $\vec{c}_w$ of the camera in world coordinates and orientation $R$ of the camera. The orientation, $R$, is a 3x3 rotational matrix: 
 
@@ -46,18 +50,22 @@ For the extrinsic parameters of the camera, we have the position $\vec{c}_w$ of 
         x_c \\ y_c \\ z_c
     \end{bmatrix}
     =
-    \begin{bmatrix}
-        r_{11} & r_{12} & r_{13} \\
-        r_{21} & r_{22} & r_{23} \\
-        r_{31} & r_{32} & r_{33}
-    \end{bmatrix}
+    \underbrace{
+        \begin{bmatrix}
+            r_{11} & r_{12} & r_{13} \\
+            r_{21} & r_{22} & r_{23} \\
+            r_{31} & r_{32} & r_{33}
+        \end{bmatrix}
+    }_{\mathlarger{R}}
     \begin{bmatrix}
         x_w \\ y_w \\ z_w
     \end{bmatrix}
     +
-    \begin{bmatrix}
-        t_x \\ t_y \\ t_z
-    \end{bmatrix}
+    \underbrace{  
+        \begin{bmatrix}
+            t_x \\ t_y \\ t_z
+        \end{bmatrix}
+    }_{\mathlarger{\vec{t}}}
 \end{gather}
 
 
@@ -73,8 +81,16 @@ For the extrinsic parameters of the camera, we have the position $\vec{c}_w$ of 
             r_{31} & r_{32} & r_{33} & t_z \\
             0      & 0      & 0      & 1
         \end{bmatrix}
-    }_{\mathlarger{=M_{ext}}}
+    }_{\mathlarger{M_{ext}}}
     \begin{bmatrix}
         x_w \\ y_w \\ z_w \\1
     \end{bmatrix}
+\end{equation}
+
+\begin{equation}
+    M_{ext} = 
+    \begin{bmatrix}
+        R_{3 \times 3} & t_{3 \times 1} \\
+        0_{1 \times 3} & 1
+    \end{bmatrix} 
 \end{equation}
