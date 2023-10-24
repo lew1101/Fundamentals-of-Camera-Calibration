@@ -33,7 +33,9 @@
 \usepackage{sectsty}
 \usepackage{titling}
 \usepackage{ragged2e}
+\usepackage{pdfpages}
 
+\usepackage{xcolor}
 \usepackage{graphicx}
 \usepackage{csquotes}
 \usepackage{booktabs}
@@ -52,6 +54,8 @@
 \usepackage{multirow}
 \usepackage{tabularx}
 \usepackage{longtable}
+
+\usepackage[cachedir=.cache/minted]{minted}
 
 % ======================================
 % Page Styles
@@ -85,6 +89,14 @@
 
 \setstretch{1.5}
 \numberwithin{equation}{section}
+
+\definecolor{bg}{rgb}{0.95,0.95,0.95}
+\usemintedstyle{emacs}
+\setminted{
+    bgcolor=bg,
+    fontsize=\scriptsize, 
+    linenos, 
+    breaklines}
 
 % ======================================
 % Custom Commands

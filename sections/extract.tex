@@ -46,6 +46,16 @@ Once we have solved for the projection for the projection matrix $P$, we can the
     =KR
 \end{equation}
 
+Since $K$ is in the form of an \emph{upper right triangular matrix} and $R$ is an \emph{orthonormal matrix}, we can find unique solutions for $K$ and $R$ using a method called \emph{RQ decomposition}.
+
+\subsection{RQ Decomposition}
+
+RQ decomposition is a technique which allows us to uniquely decompose a matrix $A$ into a product $A=RQ$,
+
+Since
+
+\subsection{Extracting the Translation Vector}
+
 \begin{equation}
     \begin{bmatrix}
         p_{14} \\ p_{24} \\ p_{34}
@@ -62,24 +72,15 @@ Once we have solved for the projection for the projection matrix $P$, we can the
     =K\vec{t}
 \end{equation}
 
-Since $K$ is in the form of an \emph{upper right triangular matrix} and $R$ is an \emph{orthonormal matrix}, we can find unique solutions for $K$ and $R$ using a method called \emph{RQ decomposition}.
-
-\subsection{RQ Decomposition}
-
-RQ decomposition is a technique which allows us to uniquely decompose a matrix $A$ into a product $A=RQ$,
-
-Since
-
 \subsection{Extracting Orientation as Angles}
 
-When constructing the extrinsic matrix in section \ref{sec:extrinsics}, we defined
-In our rotation matrix $R$, we represent the
+When constructing the extrinsic matrix in section \ref{sec:extrinsics}, we defined the rotation matrix as the 
 
+We can represent the rotation in terms of \emph{Tait-Bryan Angles}
 
 \begin{equation}
     R \equiv R_z(\gamma)R_y(\beta)R_x(\alpha)
 \end{equation}
-
 
 \begin{subequations}
     \begin{gather}

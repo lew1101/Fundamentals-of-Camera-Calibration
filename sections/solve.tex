@@ -1,0 +1,100 @@
+\section{Solving for the Projection Matrix} \label{sec:projection}
+
+
+
+\begin{align}
+    \widetilde{u}_n = p_{11}x_w^{(n)} + p_{12}y_w^{(n)} + p_{13}z_w^{(n)} + p_{14} \\
+    \widetilde{v}_n = p_{21}x_w^{(n)} + p_{22}y_w^{(n)} + p_{23}z_w^{(n)} + p_{24} \\
+    \widetilde{w}_n = p_{31}x_w^{(n)} + p_{32}y_w^{(n)} + p_{33}z_w^{(n)} + p_{34}
+\end{align}
+
+\begin{align}
+    u_n = \frac{\widetilde{u}_n}{\widetilde{w}_n} = \frac{p_{11}x_w^{(n)} + p_{12}y_w^{(n)} + p_{13}z_w^{(n)} + p_{14}}{p_{31}x_w^{(n)} + p_{32}y_w^{(n)} + p_{33}z_w^{(n)} + p_{34}} \\
+    v_n = \frac{\widetilde{v}_n}{\widetilde{w}_n} = \frac{p_{21}x_w^{(n)} + p_{22}y_w^{(n)} + p_{23}z_w^{(n)} + p_{24}}{p_{31}x_w^{(n)} + p_{32}y_w^{(n)} + p_{33}z_w^{(n)} + p_{34}}
+\end{align}
+
+\begin{align}
+    u_n(p_{31}x_w^{(n)} + p_{32}y_w^{(n)} + p_{33}z_w^{(n)} + p_{34}) = p_{11}x_w^{(n)} + p_{12}y_w^{(n)} + p_{13}z_w^{(n)} + p_{14} \\
+    v_n(p_{31}x_w^{(n)} + p_{32}y_w^{(n)} + p_{33}z_w^{(n)} + p_{34}) = p_{21}x_w^{(n)} + p_{22}y_w^{(n)} + p_{23}z_w^{(n)} + p_{24}
+\end{align}
+
+\begin{subequations}
+    \begin{align}
+        0 = p_{11}x_w^{(n)} + p_{12}y_w^{(n)} + p_{13}z_w^{(n)} + p_{14} - p_{31}u_nx_w^{(n)} - p_{32}u_ny_w^{(n)} - p_{33}u_nz_w^{(n)} - p_{34}u_n \\
+        0 = p_{21}x_w^{(n)} + p_{22}y_w^{(n)} + p_{23}z_w^{(n)} + p_{24} - p_{31}v_nx_w^{(n)} - p_{32}v_ny_w^{(n)} - p_{33}v_nz_w^{(n)} - p_{34}v_n
+    \end{align}
+\end{subequations}
+
+\setcounter{MaxMatrixCols}{20}
+\begin{equation}
+    \scalemath{0.9}{
+    \begin{bmatrix}
+        0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0
+    \end{bmatrix}
+    =
+    \underbrace{
+        \begin{blockarray}{[*{12}c]}
+            x_w^{(1)} & y_w^{(1)} & z_w^{(1)} & 1 & 0         & 0         & 0         & 0 & -u_1 x_w^{(1)} & -u_1 y_w^{(1)} & -u_1 z_w^{(1)} & -u_1 \\
+            0         & 0         & 0         & 0 & x_w^{(1)} & y_w^{(1)} & z_w^{(1)} & 1 & -v_1 x_w^{(1)} & -v_1 y_w^{(1)} & -v_1 z_w^{(1)} & -v_1 \\
+            \BAmulticolumn{6}{c}{\vdots} & \BAmulticolumn{6}{c}{\vdots} \\
+            x_w^{(n)} & y_w^{(n)} & z_w^{(n)} & 1 & 0         & 0         & 0         & 0 & -u_n x_w^{(n)} & -u_n y_w^{(n)} & -u_n z_w^{(n)} & -u_n \\
+            0         & 0         & 0         & 0 & x_w^{(n)} & y_w^{(n)} & z_w^{(n)} & 1 & -v_n x_w^{(n)} & -v_n y_w^{(n)} & -v_n z_w^{(n)} & -v_n
+        \end{blockarray}
+    }_{\mathlarger{A}}
+    \underbrace{
+        \begin{bmatrix}
+            p_{11} \\ p_{12} \\ p_{13} \\ p_{14} \\ p_{21} \\ p_{22} \\ p_{23} \\ p_{24} \\ p_{31} \\ p_{32} \\ p_{33} \\ p_{34}
+        \end{bmatrix}
+    }_{\mathlarger{p}}
+    }
+\end{equation}
+
+homogenous linear system
+overdetermined
+
+
+\subsection{Constrained Least Squares Solution}
+
+We have now established a way to solve for the
+
+Now, we need to solve for $Ap = 0$
+\begin{equation} \label{eq:min1}
+    \optmin{p}{\lVert Ap \rVert^2}{\lVert p \rVert^2 = 1}
+\end{equation}
+For a given arbitrary vector $v \in \mathbb{R}^n$, the magnitude of the vector, $\Vert v \Vert$, is equal to $\sqrt{v_1^2+v_2^2+ \cdots + v_n^2}$. As such, we can rewrite the square of the magnitude of vector, $\Vert v \Vert ^2$, as:
+\begin{equation*}
+    \Vert v \Vert^2
+    = v_1^2+v_2^2+ \cdots v_n^2
+    =
+    \begin{bmatrix}
+        v_1 & v_2 & \cdots & v_n
+    \end{bmatrix}
+    \begin{bmatrix}
+        v_1 \\ v_2 \\ \vdots \\ v_n
+    \end{bmatrix}
+    = v^\T v
+\end{equation*}
+Thus, in equation \ref{eq:min1}, we can replace $\Vert Ap \Vert ^2$ with $p^\T A^\T Ap$ and $\Vert p \Vert ^2$ for $p^\T p$ to obtain
+\begin{equation} \label{eq:min2}
+    \optmin{p}{\left(p^\T A^\T Ap\right)}{p^\T p = 1}
+\end{equation}
+The Lagrangian \footcite[][2]{ghojoghEigenvalueGeneralized2023} of equation \ref{eq:min2} is
+\begin{equation}
+    \mathcal{L}(p, \lambda) = p^\T A^\T Ap - \lambda \left( p^\T p - 1 \right)
+\end{equation}
+where $\lambda \in \mathbb{R}$ is the Lagrange multiplier. Since $p$ is minimized when $\mathcal{L}$ is minimized, we need to look for the absolute minimum of $\mathcal{L}$, which are located at its stationary points. To find these points, we find where all the partial derivatives of the Lagrangian are zero, i.e.
+\begin{equation*}
+    \frac{\partial \mathcal{L}}{\partial p} = 0 \qquad \text{and} \qquad \frac{\partial \mathcal{L}}{\partial \lambda} = 0
+\end{equation*}
+where $\partial$ is used to denote a partial derivative (see Appendix \ref{sec:partial}). We will focus on the partial derivative of $\mathcal{L}$ with respect to $p$. Using product rule for partial derivatives, we obtain:
+\begin{gather}
+    \frac{\partial \mathcal{L}}{\partial p} = \frac{\partial}{\partial p} \left[ p^\T A^\T Ap - \lambda \left( p^\T p - 1 \right) \right] \seteq 0 \nonumber \\
+    \Rightarrow 2A^\T Ap - 2 \lambda p = 0 \nonumber \\
+    \Rightarrow A^\T Ap = \lambda p \label{eq:eigen}
+\end{gather}
+which is an eigenvalue problem for $A^\T A$. Potential solutions for $p$ are eigenvectors that satisfy equation \ref{eq:eigen}, \footcite[][]{nayarLinearCamera2021} with $\lambda \in \mathbb{R}$ as the eigenvalue. Since \ref{eq:min2} is a minimization problem, the minimized eigenvector $p$ is the one which has the smallest eigenvalue $\lambda$. \footcite[][2]{ghojoghEigenvalueGeneralized2023}
+
+which states that for a given matrix $M \in \mathbb{R}^{n \times n}$, determine the eigenvector $x \in \mathbb{R}^n, x \neq 0$ and the eigenvalue $\lambda \in \mathbb{C}$ such that:
+
+
+

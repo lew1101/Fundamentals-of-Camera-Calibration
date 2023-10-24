@@ -1,0 +1,3 @@
+[submodule "calicam"]
+	path = calicam
+	url = https://github.com/lew1101/calicam.git

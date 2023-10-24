@@ -7,9 +7,9 @@
 
 \onehalfspacing
 
-\immediate\write18{texcount -merge \jobname.tex | sed -n 's/.*Words in text://p' | awk '{$1=$1};1' > 'count.txt'}
+\immediate\write18{texcount -merge \jobname.tex | sed -n 's/.*Words in text://p' | awk '{$1=$1};1' > 'build/count.txt'}
 
-\providecommand{\totalwordcount}{\input{count.txt}}
+\providecommand{\totalwordcount}{\input{build/count.txt}}
 
 % =================================================================
 % Content
@@ -58,11 +58,10 @@
 \setcounter{page}{1}
 
 \input{sections/intro}
-\input{sections/model}
+\input{sections/approach}
 \input{sections/prerequisites}
-\input{sections/extrinsics}
-\input{sections/intrinsics}
-\input{sections/projection}
+\input{sections/model}
+\input{sections/solve}
 \input{sections/extract}
 \input{sections/experimental.tex}
 \input{sections/applications}
@@ -85,9 +84,8 @@ I am very grateful to my supervisor Mr. Hoteit for his continual guidance and in
 \begin{appendices}
     \pagestyle{appendices}
     \input{sections/appendix/data}
-    \input{sections/appendix/partial}
-    \input{sections/appendix/lagrangian}
-    \input{sections/appendix/eigenvector}
+    \input{sections/appendix/object}
+    \input{sections/appendix/code}
 \end{appendices}
 %TC:endignore
 
