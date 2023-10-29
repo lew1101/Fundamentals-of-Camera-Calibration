@@ -1,0 +1,151 @@
+\section{Extracting Parameters}
+
+Once we have solved for the projection for the projection matrix $P$, we can then extract the intrinsic and extrinsic parameters. We know that
+
+\begin{align}
+    P & = K\left[\,R \,\vert\, \vec{t}\:\,\right]       \nonumber \\
+      & = K\left[\,R \,\vert\,-R\vec{c_w}\,\right]      \nonumber \\
+      & = \left[\,K\!R\,\vert\,-K\!R\vec{c_w}\,\right]
+\end{align}
+\begin{equation}
+    P = \left[\,Q \,\vert\,-Q\vec{c_w}\,\right]
+\end{equation}
+
+\begin{equation*}
+    Q =
+    \begin{bmatrix}
+        p_{11} & p_{12} & p_{13} \\
+        p_{21} & p_{22} & p_{23} \\
+        p_{31} & p_{32} & p_{33}
+    \end{bmatrix}
+    =
+    \underbrace{
+        \begin{bmatrix}
+            f_x & 0   & c_x \\
+            0   & f_y & c_y \\
+            0   & 0   & 1
+        \end{bmatrix}
+    }_{\mathlarger{K}}
+    \underbrace{
+        \begin{bmatrix}
+            r_{11} & r_{12} & r_{13} \\
+            r_{21} & r_{22} & r_{23} \\
+            r_{31} & r_{32} & r_{33} \\
+        \end{bmatrix}
+    }_{\mathlarger{R}}
+\end{equation*}
+
+Since $K$ is in the form of an \emph{upper right triangular matrix} and $R$ is an \emph{orthonormal matrix}, we can find unique solutions for $K$ and $R$ using a method called \emph{RQ decomposition}.
+
+\subsection{RQ Decomposition}
+
+RQ decomposition is a technique which allows us to uniquely decompose a matrix $A$ into a product $A=RQ$,
+
+Since
+
+\subsection{Extracting the Translation Vector}
+
+\begin{gather}
+    -Q\vec{c_w} =
+    \begin{bmatrix}
+        p_{14} \\ p_{24} \\ p_{34}
+    \end{bmatrix} \nonumber \\
+    \Rightarrow \vec{c_w} = -Q^{-1}
+    \begin{bmatrix}
+        p_{14} \\ p_{24} \\ p_{34}
+    \end{bmatrix}
+\end{gather}
+
+
+
+
+\subsection{Extracting Orientation as Angles}
+
+When constructing the extrinsic matrix in section \ref{sec:extrinsics}, we defined the rotation matrix as the
+
+We can represent the rotation in terms of \emph{Tait-Bryan Angles}
+
+\begin{equation}
+    R \equiv R_z(\gamma)R_y(\beta)R_x(\alpha)
+\end{equation}
+
+\begin{subequations}
+    \begin{gather}
+        R_x(\alpha) =
+        \begin{bmatrix}
+            1 & 0            & 0             \\
+            0 & \cos(\alpha) & -\sin(\alpha) \\
+            0 & \sin(\alpha) & \cos(\alpha)
+        \end{bmatrix} \\
+        R_y(\beta) =
+        \begin{bmatrix}
+            \cos(\beta)  & 0 & -\sin(\beta) \\
+            0            & 1 & 0            \\
+            -\sin(\beta) & 0 & -\cos(\beta)
+        \end{bmatrix} \\
+        R_z(\gamma) =
+        \begin{bmatrix}
+            \cos(\gamma) & -\sin(\gamma) & 0 \\
+            \sin(\gamma) & \cos(\gamma)  & 0 \\
+            0            & 0             & 1
+        \end{bmatrix}
+    \end{gather}
+\end{subequations}
+
+\newcommand{\ca}{\mathrm{c}}
+\newcommand{\sa}{\mathrm{s}}
+
+\begin{align}
+    R & =
+    \begin{bmatrix}
+        0 & \cos(\alpha) & -\sin(\alpha) \\
+        0 & \sin(\alpha) & \cos(\alpha)  \\
+        1 & 0            & 0             \\
+    \end{bmatrix}
+    \begin{bmatrix}
+        \cos(\beta)  & 0 & -\sin(\beta) \\
+        0            & 1 & 0            \\
+        -\sin(\beta) & 0 & -\cos(\beta)
+    \end{bmatrix}
+    \begin{bmatrix}
+        \cos(\gamma) & -\sin(\gamma) & 0 \\
+        \sin(\gamma) & \cos(\gamma)  & 0 \\
+        0            & 0             & 1
+    \end{bmatrix} \nonumber \\
+      & =
+    \scalemath{0.85}{
+        \begin{bmatrix}
+            \cos(\beta)\,\cos(\gamma) & \sin(\alpha)\,\sin(\beta)\,\cos(\gamma) - \cos(\alpha)\,\sin(\gamma) & \cos(\alpha)\,\sin(\beta)\,\cos(\gamma) + \sin(\alpha)\,\cos(\gamma) \\
+            \cos(\beta)\,\sin(\gamma) & \sin(\alpha)\,\sin(\beta)\,\sin(\gamma) + \cos(\alpha)\,\cos(\gamma) & \cos(\alpha)\,\sin(\beta)\,\sin(\gamma) - \sin(\alpha)\,\cos(\gamma) \\
+            -\sin(\beta)              & \sin(\alpha)\,\cos(\beta)                                            & \cos(\alpha)\,\cos(\beta)
+        \end{bmatrix}
+    }
+\end{align}
+
+We have that
+\begin{equation*}
+    r_{31} = -\sin(\beta) \nonumber
+\end{equation*}
+\begin{equation}
+    \Rightarrow \beta = \sin^{-1}(-r_{31})
+\end{equation}
+
+\begin{equation*}
+    r_{21} = \cos(\beta)\sin(\gamma)
+\end{equation*}
+\begin{align}
+    \begin{split}
+        \Rightarrow \gamma & = \sin^{-1}\left(\frac{r_{21}}{\cos(\beta)}\right)               = \sin^{-1}\left(\frac{r_{21}}{\cos(\sin^{-1}(-r_{31}))}\right) \\
+        & = \sin^{-1}\left(\frac{r_{21}}{\sqrt{1-r_{31}^2}}\right)
+    \end{split}
+\end{align}
+
+\begin{equation*}
+    r_{32} = \sin(\alpha)\cos(\beta)
+\end{equation*}
+\begin{align}
+    \begin{split}
+        \Rightarrow \alpha & = \sin^{-1}\left(\frac{r_{32}}{\cos(\beta)}\right)               = \sin^{-1}\left(\frac{r_{32}}{\cos(\sin^{-1}(-r_{31}))}\right) \\
+        & = \sin^{-1}\left(\frac{r_{32}}{\sqrt{1-r_{31}^2}}\right)
+    \end{split}
+\end{align}

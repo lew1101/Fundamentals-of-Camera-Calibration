@@ -23,7 +23,11 @@
     tablewithin=section
 ]{caption}
 \usepackage[protrusion=true, expansion=true]{microtype}
-\usepackage[hidelinks]{hyperref}
+\usepackage[
+    colorlinks,
+    linkcolor=black,
+    citecolor=black,
+    urlcolor={blue!80!black}]{hyperref}
 \usepackage{fancyhdr}
 \usepackage[indent]{parskip}
 \usepackage{lastpage}
@@ -55,6 +59,7 @@
 \usepackage{tabularx}
 \usepackage{longtable}
 
+\usepackage{dirtree}
 \usepackage[cachedir=.cache/minted]{minted}
 
 % ======================================
@@ -94,8 +99,8 @@
 \usemintedstyle{emacs}
 \setminted{
     bgcolor=bg,
-    fontsize=\scriptsize, 
-    linenos, 
+    fontsize=\scriptsize,
+    linenos,
     breaklines}
 
 % ======================================

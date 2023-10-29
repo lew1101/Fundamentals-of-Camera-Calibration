@@ -1,0 +1,55 @@
+\section{Experimental Validation}
+
+In an attempt to show that the model works, I created the program
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.45\textwidth]{assets/images/iphone_image}
+    \caption{Photograph 1. The photo editing software \emph{GIMP} was used for edge detection, and the coordinates of the calibration points were selected manually. }
+\end{figure}
+
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{assets/graphs/iphone_graph}
+    \caption{Graph produced by \texttt{Matplotlib} which displays the results of the trial}
+\end{figure}
+
+\begin{equation*}
+    P =
+    \begin{bmatrix}
+        \num{-2.5844e-03} & \num{1.7334e-03}  & \num{-4.6719e-04} & \num{6.0581e-01} \\
+        \num{4.8240e-04}  & \num{4.4097e-04}  & \num{-3.1337e-03} & \num{7.9559e-01} \\
+        \num{-3.3990e-07} & \num{-3.1311e-07} & \num{-2.8179e-07} & \num{4.1340e-04}
+    \end{bmatrix}
+\end{equation*}
+
+\begin{table}[H]
+    \centering
+    \caption{Parameters}
+    \begin{tabular}{| C{0.15\textwidth} | C{0.30\textwidth} |}
+        \hline
+        Parameter & Value                   \\
+        \hline
+        \hline
+        $f_x$     & $\qty{5590.3}{\pixel}$ \\
+        $f_y$     & $\qty{5571.7}{\pixel}$ \\
+        \hline
+        $c_x$     & $\qty{1595.2}{\pixel}$ \\
+        $c_y$     & $\qty{1983.1}{\pixel}$ \\
+        \hline
+        $\alpha$  & $\qty{38.90}{\degree}$  \\
+        $\beta$   & $\qty{29.52}{\degree}$  \\
+        $\gamma$  & $\qty{-48.01}{\degree}$ \\
+        \hline
+        $t_x$     & $\qty{470.7}{\mm}$     \\
+        $t_y$     & $\qty{457.6}{\mm}$     \\
+        $t_z$     & $\qty{390.7}{\mm}$     \\
+        \hline
+    \end{tabular}
+\end{table}
+
+
+The reprojection error, $\mu$, was calculated to be $\pm \qty{3.02}{\pixel}$.
+
