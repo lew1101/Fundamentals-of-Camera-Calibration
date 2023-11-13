@@ -1,9 +1,5 @@
 \ProvidesPackage{wordcount}
 
-\newcommand{\countwords}{
-    \write18{texcount -merge \jobname.tex | sed -n 's/.*Words in text://p' | awk '{$1=$1};1' > 'build/count.txt'}
-}
+\immediate\write18{texcount -merge \jobname.tex | sed -n 's/.*Words in text://p' | awk '{$1=$1};1' > 'build/count.txt'}
 
-\newcommand{\printwordcount}{
-    \input{build/count.txt}
-}
+\providecommand{\printwordcount}{\input{build/count.txt}\unskip}

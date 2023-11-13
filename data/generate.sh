@@ -29,6 +29,6 @@ do
 
         mkdir -p "${output_dir}"
 
-        eval "\${CALICAM_EXE}" "\${cal_points}" --noprint --data "\${data_points}" --graph "\${background_image}" --title "\${graph_title}" --log "\${log_path}" --out "\${output_path}"
+        eval "\${CALICAM_EXE} \${cal_points} --data \${data_points} --graph \${background_image} --title \${graph_title} --out \${output_path} > \${log_path}"
     done
 done
