@@ -7,12 +7,12 @@
     \caption{Pinhole camera model.}
 \end{figure}
 
-For our camera model, we will introduce 4 different coordinate systems:
+For our camera model, we will isntroduce 4 different coordinate systems:
 \begin{itemize}[leftmargin=!, itemindent=-4ex]
-    \item\textbf{The World Coordinate Frame $\boldsymbol{\mathcal{W}}$}. Points are denoted as $[x_w, y_w, z_w]^\T$
-    \item\textbf{The Camera Coordinate Frame $\boldsymbol{\mathcal{C}}$}. Points are denoted as $[x_c, y_c, z_c]^\T$.
-    \item\textbf{The Image Plane $\boldsymbol{\Pi}$}. Points are denoted as $[x_i, y_i]^\T$.
-    \item\textbf{The Sensor Grid}. Points are denoted as $[u, v]^\T$.
+    \item\textbf{The World Coordinate Frame $\boldsymbol{\mathcal{W}}$}. Points are denoted as $\left(x_w, y_w, z_w\right)$
+    \item\textbf{The Camera Coordinate Frame $\boldsymbol{\mathcal{C}}$}. Points are denoted as $\left(x_c, y_c, z_c\right)$.
+    \item\textbf{The Image Plane $\boldsymbol{\Pi}$}. Points are denoted as $\left(x_i, y_i\right)$.
+    \item\textbf{The Sensor Grid}. Points are denoted as $\left(u, v\right)$.
 \end{itemize}
 
 
@@ -39,11 +39,11 @@ where $\vec{p}_i$ and $\vec{p}_c$ represents the position of $P$ in the image pl
     \caption{Perspective projection of the point $P$ onto the image plane $\Pi$.}
 \end{figure}
 
-When a straight line is drawn from $P$ to its projection $P_i$ through the aperture, it intersects the optical axis. Deconstructing this intersection in the $x$ and $y$ direction, pairs of similar triangles are formed on the $x$ and $y$ plane. This is visualized in figure \ref{fig:similar_triangles}
-\begin{figure}[H] \label{fig:similar_triangles}
+When a straight line is drawn from $P$ to its projection $P_i$ through the aperture, it intersects the optical axis. Deconstructing this intersection in the $x$ and $y$ direction, pairs of similar triangles are formed on the $x$ and $y$ plane. This is visualized in Figure \ref{fig:similar_triangles}.
+\begin{figure}[H] 
     \centering
     \includegraphics[width=\textwidth]{figures/similar_triangles}
-    \caption{Similar triangles formed by perspective projection, which relate $x_i$ to $x_c$ and $y_i$ to $y_c$}
+    \caption{Similar triangles formed by perspective projection, which relate $x_i$ to $x_c$ and $y_i$ to $y_c$} \label{fig:similar_triangles}
 \end{figure}
 
 \begin{subequations}
@@ -96,13 +96,13 @@ Since $m_x$, $m_y$, and $f$ are all unknowns, we can combine the products $m_x f
     =
     \underbrace{
         \begin{bmatrix}
-            f_x & 0   & c_x & 0 \\
-            0   & f_y & c_y & 0 \\
-            0   & 0   & 1   & 0
+            f_x & 0   & c_x  \\
+            0   & f_y & c_y  \\
+            0   & 0   & 1   
         \end{bmatrix}
-    }_{\mathlarger{M_{int}}}
+    }_{\mathlarger{K}}
     \begin{bmatrix}
-        x_c \\ y_c \\ z_c \\ 1
+        x_c \\ y_c \\ z_c 
     \end{bmatrix}
 \end{equation}
 
@@ -215,8 +215,8 @@ For the extrinsic parameters of the camera, we have the position $\vec{c}_w$ of 
 \begin{equation}
     M_{ext} = 
     \begin{bmatrix}
-        R_{3 \times 3} & t_{3 \times 1} \\
-        0_{1 \times 3} & 1
+        R & t  \\
+        0 & 1
     \end{bmatrix} 
 \end{equation}
 

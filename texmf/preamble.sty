@@ -66,8 +66,16 @@
 % Page Styles
 % ======================================
 
+\onehalfspacing
+\setstretch{1.5}
+
+\setlength{\jot}{1.5ex}
+\setlength{\headheight}{14.5pt}
+\setlength\tabcolsep{4pt} % default value: 6pt
+
 \setcounter{tocdepth}{5}
 \setcounter{secnumdepth}{5}
+\numberwithin{equation}{section}
 
 \fancypagestyle{frontmatter}{
     \pagestyle{empty}
@@ -88,39 +96,16 @@
     \fancyhead[L]{\footnotesize\slshape\scshape\nouppercase{Appendix \leftmark}}
 }
 
-\setlength{\jot}{1.5ex}
-\setlength{\headheight}{14.5pt}
-\setlength\tabcolsep{4pt} % default value: 6pt
-
-\setstretch{1.5}
-\numberwithin{equation}{section}
-
-\definecolor{bg}{rgb}{0.95,0.95,0.95}
-\usemintedstyle{emacs}
+\usemintedstyle{igor}
+\definecolor{codebg}{rgb}{0.95,0.95,0.95}
 \setminted{
-    bgcolor=bg,
+    breaklines,
+    obeytabs,
+    tabsize=2,
+    python3,
+    bgcolor=codebg,
     fontsize=\scriptsize,
-    linenos,
-    breaklines}
-
-% ======================================
-% Custom Commands
-% ======================================
+    linenos
+}
 
 \DeclareSIUnit{\pixel}{px}
-
-\newcommand{\scalemath}[2]{\scalebox{#1}{\mbox{\ensuremath{\displaystyle #2}}}}
-
-\newenvironment{system}
-{\left\lbrace\begin{array}{@{}l@{}}}
-        {\end{array}\right.}
-
-\newcommand{\seteq}{\stackrel{\mathclap{\mbox{\normalfont\scriptsize set}}}{=}}
-
-\newcommand{\optmin}[3]{\underset{#1}{\text{minimize}}\enspace #2 \enspace \text{subject to} \enspace  #3}
-
-\newcommand{\T}{\mathsf{T}}
-
-\newcommand{\dss}{\displaystyle}
-
-\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}

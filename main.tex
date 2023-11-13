@@ -1,19 +1,19 @@
 \documentclass[12pt, oneside]{article}
 
-\usepackage{./texmf/preamble}
+\usepackage{texmf/preamble}
+\usepackage{texmf/macros}
+\usepackage{texmf/wordcount}
 
 \graphicspath{{./assets/}}
 \addglobalbib{sources.bib}
 
-\onehalfspacing
 
-\immediate\write18{texcount -merge \jobname.tex | sed -n 's/.*Words in text://p' | awk '{$1=$1};1' > 'build/count.txt'}
-
-\providecommand{\totalwordcount}{\input{build/count.txt}}
+\immediate\countwords
 
 % =================================================================
 % Content
 % =================================================================
+
 
 \begin{document} % BEGIN
 \pagestyle{frontmatter}
@@ -33,14 +33,14 @@
         \vspace*{\fill}
 
         \rule{\linewidth}{1.5pt} \\ [0.5cm]
-        {\LARGE \bfseries Mathematical Techniques and Applications of Camera Calibration }
+        {\LARGE \bfseries Mathematical Techniques and Applications of Camera Calibration}
         \rule{\linewidth}{0.5pt} \\
 
         \vspace*{\fill}
 
         \textbf{Research Question:} What mathematical techniques can be employed to develop highly accurate camera models, and what are their real-world applications where these models prove valuable? \\ [1cm]
 
-        \textbf{Word Count:} \totalwordcount words
+        \textbf{Word Count:} \printwordcount words
 
         \vspace*{2cm}
 
@@ -71,7 +71,7 @@
 \section*{Acknowledgements}
 \addcontentsline{toc}{section}{Acknowledgements}
 
-I am very grateful to my supervisor Mr. Hoteit for his continual guidance and invaluable pieces of advice during the process of writing this extended essay. Additionally, I would like to express my appreciation to Mr. Auclair for dedicating his time to instruct me on camera operation and familiarizing me with camera settings. I am also indebted to Mr. Matthewson for his guidance with the manufacturing of my calibration object, and to Leon, for his help in operating the laser cutter. Last but not least, I want to thank to Aditya for aiding me with the creation of a diagram used in my paper.
+I am very grateful to my supervisor Mr. Hoteit for his continual guidance and invaluable pieces of advice during the process of writing this extended essay. Additionally, I would like to express my appreciation to Mr. Auclair for dedicating his time to instruct me on camera operation and familiarizing me with camera settings. I am also indebted to Mr. Matthewson for his guidance with the manufacturing of my calibration object, and to Leon, for his help in operating the laser cutter. Last but not least, I want to thank Aditya for aiding me in the process of creating some of the diagrams used in my paper.
 \clearpage
 \pagestyle{backmatter}
 
@@ -82,9 +82,8 @@ I am very grateful to my supervisor Mr. Hoteit for his continual guidance and in
 \clearpage
 \begin{appendices}
     \pagestyle{appendices}
-    \input{sections/appendix/A_data.tex}
-    \input{sections/appendix/B_object.tex}
-    \input{sections/appendix/C_code.tex}
+    \input{sections/appendix/A_object.tex}
+    \input{sections/appendix/B_code.tex}
 \end{appendices}
 %TC:endignore
 
