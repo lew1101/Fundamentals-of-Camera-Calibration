@@ -9,7 +9,7 @@ however they all build upon techniques first described in multiple highly influe
 
 A camera model is a projection model which approximates the function of a camera by describing a mathematical relationship between points in 3D space and its projection onto the sensor grid of the camera. In order to construct such a model, we must first understand the general workings of a camera.
 
-The modern lens Camera is highly sophisticated, built with an array of complex mechanisms and a wide range of features. The complexity of cameras can be better understood simplifying the lens camera into three main elements critical to image projection: the lens, the aperture, and the sensor grid (CCD). 
+The modern lens camera is highly sophisticated, built with an array of complex mechanisms and a wide range of features such as zoom and autofocus. However, we only need to focus on its three principal elements critical to image projection: the lens, the aperture, and the sensor grid (CCD). 
 
 \begin{itemize}[leftmargin=!, itemindent=-5ex]
     \item Lens -- Focuses incoming light rays and projects it onto the sensor grid. Modern cameras have compound lenses (lenses made up of several lens elements) in order to minimize undesired effects such as aberration, blurriness, and distortion. 
@@ -23,7 +23,7 @@ The modern lens Camera is highly sophisticated, built with an array of complex m
     \caption{Lens camera. Adapted from \cite{coltonPhysics1232012}} \label{fig:lens_camera}
 \end{figure}
 
-However, even a simplified model of a lens camera is still too complicated to describe, as it is impossible to encapsulate the complex behavior of a lens using a simple mathematical equation. As such, we need to sacrifice some precision by find a simpler model which sufficiently describes the behavior of a lens camera. 
+However, even this simplified model of a lens camera is still too complicated to describe, as it is impossible to encapsulate the complex behavior of a lens succinctly using one simple mathematical equation. As such, a simpler model needs to be devised by distilling the behavior to its most fundamental and essential dynamics. In doing so, we exclude certain details, but as we will see 
 
 \subsubsection{Pinhole Camera Model}
 

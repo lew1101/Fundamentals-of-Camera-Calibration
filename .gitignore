@@ -3,8 +3,8 @@ Makefile
 
 .cache/*
 build/*
-
 !build/main.pdf
+
 indent.log
 
 compile_commands.json

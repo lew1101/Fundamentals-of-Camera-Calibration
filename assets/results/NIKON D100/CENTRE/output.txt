@@ -33,5 +33,5 @@ Orientation:
 	γ = 16.04°
 
 Reprojection Errors: 
-	μ_max = 43.438 px 
-	μ_avg = 6.148 px
+	μ_max = 14.127 px 
+	μ_avg = 5.036 px
