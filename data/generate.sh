@@ -5,7 +5,7 @@ SCRIPTDIR=$(exec 2>/dev/null;cd -- $(dirname "$0"); unset PWD; /usr/bin/pwd || /
 CALICAM_EXE="${SCRIPTDIR}/../calicam/run.py"
 OUTPUT_DIR="${SCRIPTDIR}/../assets/results"
 
-CAMERAS=("CANON D80" "IPHONE X" "NIKON D100")
+CAMERAS=("CANON EOS D80" "IPHONE X" "NIKON D100")
 SUBDIRS=("SPREAD" "CENTRE")
 
 IFS=""

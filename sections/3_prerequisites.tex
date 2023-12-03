@@ -1,13 +1,10 @@
 \section{Prerequisites}
 
-Given the that this paper utilizes mathematical concepts beyond the scope of the IB Mathematics Analysis and Approaches HL curriculum, it is imperative that some notation and important ideas are introduced prior.
-
 \subsection{Notation}
 \noindent\textbf{Vectors and Matrices.} In this paper, lowercase letters are used to denote vectors, whereas capital letters are used for matrices. Depending on the context, vectors can also be attached with diacritics:
 \begin{itemize}[leftmargin=!, itemindent=-4ex]
-    \item \textbf{$\vec{v}$} -- a letter with an arrow above it denotes a positional vector or translational vector dealing with the transformation of points in space.
-    \item \textbf{$\widetilde{v}$} -- a letter with a tilde above it denotes a vector represented in homogenous coordinates. This idea is explained in section \ref{sec:homogenous}.
-    \item \textbf{$v$} -- when explicitly stated, a letter without diacritics can also denote a vector if it does not fall into the categories listed above. 
+    \item \textbf{$\vec{v}$} -- a letter with an arrow above it denotes a positional vector or translational vector dealing with the transformations.
+    \item \textbf{$\widetilde{v}$} -- a letter with a tilde above it denotes a vector represented in homogenous coordinates\footnote{See section \ref{sec:homogenous}.}.
 \end{itemize}
 
 \noindent\textbf{Transpose of Vectors and Matrices.} The transpose of a vector or a matrix is an operation whereby the rows and columns of the vector or matrix are inverted, and this is denoted using the notation $v^\T$ or $M^\T$. For example:
@@ -35,10 +32,18 @@ When
 
 
 
-Given the vector $[\,x, y\,]^\T \in \Real^2$, we can express it in terms of homogenous coordinates: 
+Given the vector $[\,u, v\,]^\T \in \Real^2$, we can express it in terms of homogenous coordinates: 
 \begin{equation}
     \begin{bmatrix}
-        x \\ y
+        u \\ v \\ 1
+    \end{bmatrix}
+    \equiv
+    \begin{bmatrix}
+        u\widetilde{w} \\ v\widetilde{w} \\ \widetilde{w}
+    \end{bmatrix}
+    \equiv
+    \begin{bmatrix}
+        \widetilde{u} \\ \widetilde{v} \\ \widetilde{w}
     \end{bmatrix}
 \end{equation}
 

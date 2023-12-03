@@ -33,11 +33,12 @@
 \usepackage{lastpage}
 \usepackage{subcaption}
 \usepackage{setspace}
-\usepackage[titletoc, title]{appendix}
+\usepackage[title]{appendix}
 \usepackage{sectsty}
 \usepackage{titling}
 \usepackage{ragged2e}
 \usepackage{pdfpages}
+\usepackage{tablefootnote}
 
 \usepackage{xcolor}
 \usepackage{graphicx}
@@ -49,7 +50,7 @@
 \usepackage{icomma}
 \usepackage{mathtools}
 \usepackage{amssymb}
-\usepackage{siunitx}
+\usepackage[per-mode=symbol]{siunitx}
 \usepackage{array}
 \usepackage{blkarray}
 \usepackage{enumitem}
@@ -72,7 +73,7 @@
 
 \fancypagestyle{mainmatter}{
     \fancyhf{}
-    \fancyhead[L]{\footnotesize\slshape\scshape\nouppercase{Section \leftmark}}
+    \fancyhead[L]{\footnotesize\slshape\scshape\nouppercase{ \leftmark}}
     \fancyhead[R]{\normalsize\thepage}
 }
 
@@ -96,8 +97,6 @@
     fontsize=\scriptsize,
     linenos
 }
-
-\DeclareSIUnit{\pixel}{px}
 
 \onehalfspacing
 \setstretch{1.5}

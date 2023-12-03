@@ -25,9 +25,25 @@ In an attempt to show that the model works, I created the program
     \end{bmatrix}
 \end{equation*}
 
-\begin{table}
-    \input{assets/tables/results.tex} 
+\begin{table}[H]
+    \centering
+    \input{assets/tables/results.tex}
     \caption{Intrinsic and Extrinsic Parameters calculated by \texttt{calicam}.}
 \end{table}
 
+\subsection{Validating Estimated Focal Length}
+Given that specification of cameras are readily available online, we can actually evaluate the accuracy of our calculated focal lengths. Assuming that the pixels are square, we estimate the focal lengths of our cameras to be the average of the horizontal and vertical focal lengths. Then, based on the manufacturer reported size of each individual pixel (known as the \emph{pixel pitch}), we can convert our estimated focal length from pixels to millimeters.
 
+\begin{table}[H]
+    \centering
+    \input{assets/tables/fl_comparison.tex}
+    \caption{Comparison of Calculated vs. Reported Focal Length.}
+\end{table}
+
+Considering that most 
+
+With exception to the \textbf{Nikon D100}, the 
+
+I suspect that the reason for the error is that I used a zoom lens for the Nikon D100, and the 
+
+\footcite{waynefAnswerAre2017}
