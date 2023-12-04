@@ -6,7 +6,6 @@ CALICAM_EXE="${SCRIPTDIR}/../calicam/run.py"
 OUTPUT_DIR="${SCRIPTDIR}/../assets/results"
 
 CAMERAS=("CANON EOS D80" "IPHONE X" "NIKON D100")
-SUBDIRS=("SPREAD" "CENTRE")
 
 IFS=""
 
@@ -14,21 +13,18 @@ for camera in "${CAMERAS[@]}"
 do
     background_image="${SCRIPTDIR}/${camera}/object.jpeg"
 
-    for subdir in "${SUBDIRS[@]}"
-    do
-        dir="${SCRIPTDIR}/${camera}/${subdir}"
-        output_dir="${OUTPUT_DIR}/${camera}/${subdir}"
+    dir="${SCRIPTDIR}/${camera}/"
+    output_dir="${OUTPUT_DIR}/${camera}"
 
-        cal_points="${dir}/calibration.csv"
-        data_points="${dir}/points.csv"
-        graph_title="${camera} - ${subdir}"
-        log_path="${output_dir}/output.txt"
-        output_path="${output_dir}/graph.png"
+    cal_points="${dir}/calibration.csv"
+    data_points="${dir}/points.csv"
+    graph_title="${camera}"
+    log_path="${output_dir}/output.txt"
+    output_path="${output_dir}/graph.png"
 
-        echo "\nProcessing $dir\n"
+    echo "\nProcessing $dir\n"
 
-        mkdir -p "${output_dir}"
+    mkdir -p "${output_dir}"
 
-        eval "\${CALICAM_EXE} \${cal_points} --data \${data_points} --graph \${background_image} --title \${graph_title} --out \${output_path} > \${log_path}"
-    done
+    eval "\${CALICAM_EXE} \${cal_points} --data \${data_points} --graph \${background_image} --title \${graph_title} --out \${output_path} > \${log_path}"
 done
