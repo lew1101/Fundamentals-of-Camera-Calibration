@@ -1,17 +1,19 @@
 \section{Projection Matrix} \label{sec:projection}
 
-When we combine the equations $\widetilde{p_c} = M_{ext}\,\widetilde{p}_w$ (eq. \ref{eq:pc}) and $\widetilde{p}_i = M_{int}\,\widetilde{p}_c$ (eq. \ref{eq:pi}), we obtain
+When we combine the equation for the intrinsic transformation, $\vec{p}_i = K\vec{p}_c$ (eq. \ref{eq:pi}), with the equation for the extrinsic transformation, $\vec{p_c} = T\vec{p}_w$ (eq. \ref{eq:pc}), we obtain:
 \begin{equation} \label{eq:combined}
-    \widetilde{p}_{i} = M_{int}\,M_{ext}\,\widetilde{p}_{w}
+    \vec{p}_{i} = KT\vec{p}_{w}
 \end{equation}
-To simplify our camera model, we can define a new matrix, $P \in \mathbb{R}^{3 \times 4}$, which is equal to the product $M_{int}\,M_{ext}$. Since $M_{ext}$ is a $4 \times 4$ matrix and $M_{int}$ is a $3 \times 4$ matrix, their matrix product produces a $3 \times 4$ matrix.
+
+This single equation encapsulates the relationship between the world coordinates and its corresponding pixel coordinates. However, since that our goal is to solve for $K$ and $T$ for a particular camera when given the mappings of 3D coordinates to their pixel coordinates, it is much easier to solve for the matrix product $KT$ as opposed to each of the matrices individually. As such, we simplify our camera model by defining a new matrix, $P$, which is equal to the product $KT$. Since $K$ is a $3 \times 3$ matrix and $T$ is a $3 \times 4$ matrix, $KT$ yields a $3 \times 4$ matrix. 
 \begin{equation}
-    P=
-    \begin{bmatrix}
+    \underbrace{
+        \begin{bmatrix}
         p_{11} & p_{12} & p_{13} & p_{14} \\
         p_{21} & p_{22} & p_{23} & p_{24} \\
         p_{31} & p_{32} & p_{33} & p_{34}
     \end{bmatrix}
+    }_{\mathlarger{P}}
     \equiv
     \underbrace{
         \begin{bmatrix}
@@ -26,25 +28,18 @@ To simplify our camera model, we can define a new matrix, $P \in \mathbb{R}^{3 \
             r_{21} & r_{22} & r_{23} & t_y \\
             r_{31} & r_{32} & r_{33} & t_z \\
         \end{bmatrix}
-    }_{\mathlarger{\left[\,R\,\vert\,\vec{t}\:\right]}}
+    }_{\mathlarger{T}}
 \end{equation}
 
-Replacing $P$ for $M_{int}\,M_{ext}$ in equation \ref{eq:combined}, we obtain
+Replacing $P$ for $K\,T$ in equation \ref{eq:combined}, we obtain:
 \begin{equation} \label{eq:project}
-    \widetilde{p}_{i} = P\,\widetilde{p}_{w}
+    \vec{p}_{i} = P\,\vec{p}_{w}
 \end{equation}
-The implications of this equation is very important, as it means that a $3 \times 4$ is sufficient in describing the relationship between a point in the world coordinate frame to its projection onto the image plane in pixel coordinates. 
-
-But now, we need to figure out a way to solve for the project matrix.
-
-Given that we have equation \ref{eq:project} which relates
-
-
 
 When expressing the pixel coordinate in homogenous coordinates, equation \ref{eq:project} becomes
-\begin{equation}
+\begin{equation} \label{eq:proj}
     \begin{bmatrix}
-        \widetilde{w}_n u \\ \widetilde{w}_n v \\ \widetilde{w}_n
+        \widetilde{u}_n \\ \widetilde{v}_n \\ \widetilde{w}_n
     \end{bmatrix}
     =
     \begin{bmatrix}
@@ -57,19 +52,21 @@ When expressing the pixel coordinate in homogenous coordinates, equation \ref{eq
     \end{bmatrix}
 \end{equation}
 
-
+The implications of this equation is very important, as it means that a $3 \times 4$ matrix is sufficient in describing the relationship between a point in the world coordinate frame to its projection onto the image plane in pixel coordinates.
 
 \subsection{Solving for the Projection Matrix}
+
+Now, we need to devise a way to solve for the projection matrix. Rewriting the matrix equation \ref{eq:project} as a system of equations, we obtain:
 
 \begin{align*}
     \widetilde{u}_n = p_{11}x_w^{(n)} + p_{12}y_w^{(n)} + p_{13}z_w^{(n)} + p_{14} \\
     \widetilde{v}_n = p_{21}x_w^{(n)} + p_{22}y_w^{(n)} + p_{23}z_w^{(n)} + p_{24} \\
     \widetilde{w}_n = p_{31}x_w^{(n)} + p_{32}y_w^{(n)} + p_{33}z_w^{(n)} + p_{34}
 \end{align*}
-
+We convert the pixel coordinates homogenous coordinates to their inhomogeneous coordinates by dividing $\widetilde{u}_n$ and $\widetilde{v}_n$ by $\widetilde{w}_n$. 
 \begin{align*}
-    u_n = \frac{\widetilde{u}_n}{\widetilde{w}_n} = \frac{p_{11}x_w^{(n)} + p_{12}y_w^{(n)} + p_{13}z_w^{(n)} + p_{14}}{p_{31}x_w^{(n)} + p_{32}y_w^{(n)} + p_{33}z_w^{(n)} + p_{34}} \\
-    v_n = \frac{\widetilde{v}_n}{\widetilde{w}_n} = \frac{p_{21}x_w^{(n)} + p_{22}y_w^{(n)} + p_{23}z_w^{(n)} + p_{24}}{p_{31}x_w^{(n)} + p_{32}y_w^{(n)} + p_{33}z_w^{(n)} + p_{34}}
+    u_n & = \frac{\widetilde{u}_n}{\widetilde{w}_n} = \frac{p_{11}x_w^{(n)} + p_{12}y_w^{(n)} + p_{13}z_w^{(n)} + p_{14}}{p_{31}x_w^{(n)} + p_{32}y_w^{(n)} + p_{33}z_w^{(n)} + p_{34}} \\
+    v_n & = \frac{\widetilde{u}_n}{\widetilde{w}_n} = \frac{p_{21}x_w^{(n)} + p_{22}y_w^{(n)} + p_{23}z_w^{(n)} + p_{24}}{p_{31}x_w^{(n)} + p_{32}y_w^{(n)} + p_{33}z_w^{(n)} + p_{34}}
 \end{align*}
 
 \begin{align*}
@@ -109,7 +106,7 @@ When expressing the pixel coordinate in homogenous coordinates, equation \ref{eq
 \end{equation}
 
 homogenous linear system
-overdetermined
+overdetermined 
 
 
 \subsection{Constrained Least Squares Solution}

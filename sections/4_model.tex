@@ -1,22 +1,22 @@
 \section{Constructing the Pinhole Camera Model}
 
-\subsection{Nomenclature}
+For our camera model, we will introduce 4 different frames of reference, all of which :
+\begin{itemize}[leftmargin=!, itemindent=-4ex]
+    \item\textbf{World Coordinate Frame ($\boldsymbol{\mathcal{W}}$)}. Represents the 3D space of the scene being photographed, with respect to an origin which may be arbitrary and depends on the conventions chosen. Objects that are in the scene are defined with respect to this coordinate frame. 
+    \item\textbf{Camera Coordinate Frame ($\boldsymbol{\mathcal{C}}$)}. Represents the 3D space of the scene being photographed, but with respect to the pinhole (aperture) of the camera. 
+    \item\textbf{Image Coordinate Frame ($\boldsymbol{\Pi}$)}. 2D plane representing the image sensor plane of the camera. The origin is the principle point of the image sensor, where the optical axis intersects the image plane. 
+    \item\textbf{Pixel Coordinate Frame}. 2D plane representing the position of pixels on the image sensor. The Discrete version of the image coordinate frame, where c
+\end{itemize}
+
+The optical axis of a camera is an imaginary line which passes through the center of the aperture of the camera. 
+
+
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{figures/imaging_model}
     \caption{Pinhole camera model.}
 \end{figure}
-
-For our camera model, we will introduce 4 different coordinate systems:
-\begin{itemize}[leftmargin=!, itemindent=-4ex]
-    \item\textbf{The World Coordinate Frame $\boldsymbol{\mathcal{W}}$}. Points are denoted as $\left(x_w, y_w, z_w\right)$
-    \item\textbf{The Camera Coordinate Frame $\boldsymbol{\mathcal{C}}$}. Points are denoted as $\left(x_c, y_c, z_c\right)$.
-    \item\textbf{The Image Plane $\boldsymbol{\Pi}$}. Points are denoted as $\left(x_i, y_i\right)$.
-    \item\textbf{The Sensor Grid}. Points are denoted as $\left(u, v\right)$.
-\end{itemize}
-
-
-
 
 \begin{figure}[H]
     \centering
@@ -25,95 +25,11 @@ For our camera model, we will introduce 4 different coordinate systems:
 \end{figure}
 
 
-\subsection{Intrinsic Parameters} \label{sec:intrinsics}
-
-First, we will focus on the projection of points in the 3D space onto the image plane. The goal is to construct a calibration matrix, $K$, which relates the position of the point $P$ to its projection on the image plane. This can be expressed mathematically as follows:
-\begin{equation} \label{eq:pi}
-    \widetilde{p}_i =  K\widetilde{p}_c
-\end{equation}
-where $\vec{p}_i$ and $\vec{p}_c$ represents the position of the point $P$ in the image plane $\Pi$ and the camera frame $\mathcal{C}$ respectively.
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.9\textwidth]{figures/perspective_projection}
-    \caption{Perspective projection of the point $P$ onto the image plane $\Pi$.}
-\end{figure}
-When a straight line is drawn from $P$ to its projection $P_i$ through the aperture, it intersects the optical axis. Deconstructing this intersection in the $x$ and $y$ direction, pairs of similar triangles are formed on the $x$ and $y$ plane.
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\textwidth]{figures/similar_triangles}
-    \caption{Similar triangles formed by perspective projection, which relate $x_i$ to $x_c$ and $y_i$ to $y_c$.} \label{fig:similar_triangles}
-\end{figure}
-\begin{subequations}
-    \begin{gather}
-        \frac{x_i}{f} = \frac{x_c}{z_c} \quad \Longrightarrow \quad x_i = f \frac{x_c}{z_c} \label{subeq:xi_result}\\
-        \frac{y_i}{f} = \frac{y_c}{z_c} \quad \Longrightarrow \quad y_i = f \frac{y_c}{z_c} \label{subeq:yi_result}
-    \end{gather}
-\end{subequations}
-We can then relate the coordinates of the projection, $(x_i, y_i)$, which are in real-world units, to its position $(u, v)$ in pixels.
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\textwidth]{figures/sensor_grid}
-    \caption{Conversion from image plane coordinates to sensor grid coordinates}
-\end{figure}
-Let $m_x$ and $m_y$ represent the pixel density of the image sensor in the $x$ and $y$ axes of the image sensor plane respectively.
-\begin{align*}
-    u = m_x x_i + c_x \\
-    v = m_y y_i + c_y
-\end{align*}
-Replacing $x_i$ and $y_i$ for the result we obtained from \ref{subeq:xi_result} and \ref{subeq:yi_result}, we get:
-\begin{align*}
-    u = m_x f \frac{x_c}{z_c} + c_x \\
-    v = m_y f \frac{y_c}{z_c} + c_y
-\end{align*}
-Since $m_x$, $m_y$, and $f$ are all unknowns, we can combine the products $m_x f$ and $m_y f$ to $f_x$ and $f_y$ respectively. Under this new scheme, we define $f_x$ and $f_y$ as the horizontal and vertical focal lengths of camera.
-\begin{gather*}
-    u = f_x \frac{x_c}{z_c} + c_x \\
-    v = f_y \frac{y_c}{z_c} + c_y
-\end{gather*}
-Multiply both sides of the equations by $z_c$.
-\begin{subequations}
-    \begin{gather}
-        z_c u = f_x x_c + z_c c_x \\
-        z_c v = f_y y_c + z_c c_y
-    \end{gather}
-\end{subequations}
-Doing so allows us to express the relationship as a matrix transformation using homogenous coordinates, by letting $\widetilde{w} = z_c$. 
-\begin{equation}
-    \begin{bmatrix}
-        z_c u \\ z_c v \\ z_c
-    \end{bmatrix}
-    =
-    \begin{bmatrix}
-        f_x x_c + z_c c_x \\ f_y y_c + z_c c_y \\ z_c
-    \end{bmatrix}
-    =
-    \underbrace{
-        \begin{bmatrix}
-            f_x & 0   & c_x \\
-            0   & f_y & c_y \\
-            0   & 0   & 1
-        \end{bmatrix}
-    }_{\mathlarger{K}}
-    \begin{bmatrix}
-        x_c \\ y_c \\ z_c
-    \end{bmatrix}
-\end{equation}
-
-\begin{equation}
-    K =
-    \begin{bmatrix}
-        f_x & 0   & c_x \\
-        0   & f_y & c_y \\
-        0   & 0   & 1
-    \end{bmatrix}
-\end{equation}
-In this case, $K$ is what is known as the \emph{calibration matrix}. It is a matrix transformation which maps a point represented in the camera coordinate frame to the coordinates of their projection onto the sensor plane. An important property worth noting is that $K$ is an \emph{upper triangular matrix}. It is a special kind of square matrix with all of its non-zero entries above the main diagonal. This is an important property which we will exploit when extracting the intrinsic matrix from the projection matrix in section \ref{sec:projection}.
-
 \subsection{Extrinsic Parameters} \label{sec:extrinsics}
 
-Next, we need to establish the relationship between position of a point in the camera coordinate frame $\mathcal{C}$ to their position in the world coordinate frame $\mathcal{W}$. To do so, we find the extrinsic matrix, $M_{ext}$, which relates the positional vector $\vec{p}_w$ of point $P$ in $\mathcal{W}$, to its positional vector $\vec{p}_c$ in $\mathcal{C}$. Similar to what we did in section \ref{sec:intrinsics}, we can express this in homogenous coordinates as follows:
+First, we need to establish the relationship between position of a point in the camera coordinate frame $\mathcal{C}$ to their position in the world coordinate frame $\mathcal{W}$. To do so, we find the extrinsic matrix $T$, which relates the positional vector $\vec{p}_w$ of point $P$, to its positional vector.
 \begin{equation} \label{eq:pc}
-    \widetilde{p}_c =  M_{ext}\,\widetilde{p}_w
+    \vec{p}_c = T\vec{p}_w
 \end{equation}
 
 \begin{figure}[H]
@@ -179,7 +95,7 @@ For the extrinsic parameters of the camera, we have the position $\vec{c}_w$ of 
 
 \begin{equation}
     \begin{bmatrix}
-        x_c \\ y_c \\ z_c \\ 1
+        x_c \\ y_c \\ z_c 
     \end{bmatrix}
     =
     \underbrace{
@@ -187,19 +103,101 @@ For the extrinsic parameters of the camera, we have the position $\vec{c}_w$ of 
             r_{11} & r_{12} & r_{13} & t_x \\
             r_{21} & r_{22} & r_{23} & t_y \\
             r_{31} & r_{32} & r_{33} & t_z \\
-            0      & 0      & 0      & 1
         \end{bmatrix}
-    }_{\mathlarger{M_{ext}}}
+    }_{\mathlarger{T}}
     \begin{bmatrix}
-        x_w \\ y_w \\ z_w \\1
+        x_w \\ y_w \\ z_w \\ 1
     \end{bmatrix}
 \end{equation}
 
 \begin{equation}
-    M_{ext} =
+    T = \left[\,R\,\vert\,\vec{t}\:\right]
+\end{equation}
+
+
+\subsection{Intrinsic Parameters} \label{sec:intrinsics}
+
+Intrinsic parameters describe the internal characteristics of the camera. In other words, it dictates how in the 3D space are projected onto the image plane. We As such, our goal is to construct a calibration matrix, $K$, which relates the position of the point $P$ to its projection on the image plane. This can be expressed mathematically as follows:
+\begin{equation} \label{eq:pi}
+    \vec{p}_i =  K\vec{p}_c
+\end{equation}
+where $\vec{p}_i$ and $\vec{p}_c$ represents the position of the point $P$ on the image plane $\Pi$ and the camera frame $\mathcal{C}$ respectively.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/perspective_projection}
+    \caption{Perspective projection of the point $P$ onto the image plane $\Pi$.}
+\end{figure}
+When a straight line is drawn from $P$ to its projection $P_i$ through the aperture, it intersects the optical axis. Deconstructing this intersection in the $x$ and $y$ direction, pairs of similar triangles are formed, which relates $x_i$ to $x_c$ and $y_i$ to $y_c$.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/similar_triangles}
+    \caption{Similar triangles formed by perspective projection, which relate $x_i$ to $x_c$ and $y_i$ to $y_c$.} \label{fig:similar_triangles}
+\end{figure}
+\begin{subequations}
+    \begin{gather}
+        \frac{x_i}{f} = \frac{x_c}{z_c} \quad \Longrightarrow \quad x_i = f \frac{x_c}{z_c} \label{subeq:xi_result}\\
+        \frac{y_i}{f} = \frac{y_c}{z_c} \quad \Longrightarrow \quad y_i = f \frac{y_c}{z_c} \label{subeq:yi_result}
+    \end{gather}
+\end{subequations}
+Once the coordinates of the point projection, $(x_i, y_i)$, is known, we then need to convert it to actual pixel position of the point on the image, $(u, v)$. Pixel coordinates are measured in pixels, from the left-hand corner of the image. This is the convention that is typically followed in computer graphics. As such, there will be an offset in pixels, $(c_x, c_y)$, which represents the optical center of the image (i.e. the point at which the optical axis intersects the image plane). Additionally, the relationship between $(x_i, y_i)$ and $(u, v)$ is proportional, but they scale at different rates, as $(x_i, y_i)$ can be measured using any unit measurement, and can have negative and decimal values. On the other hand, $(u,v)$ are measured in discrete pixel value, which can different sizes depending on the camera used. As such, we define scaling factors, $m_x$ and $m_y$, be scaling factors which represent the pixel density of the image sensor in the $x$ and $y$ axes of the image sensor plane respectively. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{figures/sensor_grid}
+    \caption{Conversion from image plane coordinates to sensor grid coordinates}
+\end{figure}
+Putting all the ideas above together, we can construct a set of linear parametric equations relating the pixel coordinates to their image coordinates thus: 
+\begin{align*}
+    u = m_x x_i + c_x \\
+    v = m_y y_i + c_y
+\end{align*}
+where $u,v \in \Integer^+_{\,*}$. Replacing $x_i$ and $y_i$ for the result we obtained from equations \ref{subeq:xi_result} and \ref{subeq:yi_result}, we get:
+\begin{align*}
+    u = m_x f \frac{x_c}{z_c} + c_x \\
+    v = m_y f \frac{y_c}{z_c} + c_y
+\end{align*}
+This gives us a direct relationship between camera coordinates and their corresponding pixel coordinates. Since $m_x$, $m_y$, and $f$ are all unknowns, we can combine the products $m_x f$ and $m_y f$ into to $f_x$ and $f_y$ respectively. Under this new scheme, we define $f_x$ and $f_y$ as the horizontal and vertical focal lengths of camera.
+\begin{gather}
+    u = f_x \frac{x_c}{z_c} + c_x \\
+    v = f_y \frac{y_c}{z_c} + c_y
+\end{gather}
+Multiply both sides of the equations by $z_c$.
+\begin{subequations}
+    \begin{gather*}
+        z_c u = f_x x_c + z_c c_x \\
+        z_c v = f_y y_c + z_c c_y
+    \end{gather*}
+\end{subequations}
+Doing so allows us to express the relationship as a matrix transformation using homogenous coordinates, by letting $\widetilde{w} = z_c$. 
+\begin{equation}
     \begin{bmatrix}
-        R & t \\
-        0 & 1
+        z_c u \\ z_c v \\ z_c
+    \end{bmatrix}
+    =
+    \begin{bmatrix}
+        f_x x_c + z_c c_x \\ f_y y_c + z_c c_y \\ z_c
+    \end{bmatrix}
+    =
+    \underbrace{
+        \begin{bmatrix}
+            f_x & 0   & c_x \\
+            0   & f_y & c_y \\
+            0   & 0   & 1
+        \end{bmatrix}
+    }_{\mathlarger{K}}
+    \begin{bmatrix}
+        x_c \\ y_c \\ z_c
     \end{bmatrix}
 \end{equation}
+
+\begin{equation}
+    K =
+    \begin{bmatrix}
+        f_x & 0   & c_x \\
+        0   & f_y & c_y \\
+        0   & 0   & 1
+    \end{bmatrix}
+\end{equation}
+In this case, $K$ is what is known as the \emph{calibration matrix}. It is a matrix transformation which maps a point represented in the camera coordinate frame to the coordinates of their projection onto the sensor plane. 
+
+
 

@@ -13,7 +13,7 @@ The modern lens camera is highly sophisticated, built with an array of complex m
 \begin{itemize}[leftmargin=!, itemindent=-5ex]
     \item \textbf{Lens} -- Focuses incoming light rays and projects it onto the sensor grid. Modern cameras have compound lenses (lenses made up of several lens elements) in order to minimize undesired effects such as aberration, blurriness, and distortion. 
     \item \textbf{Aperture} -- Controls the amount of light that reaches the sensor. By adjusting the aperture size, the exposure and depth of field can be modified.
-    \item \textbf{Sensor Grid} -- Captures the projected image
+    \item \textbf{Sensor Grid} -- Captures incoming light rays and converts this information into pixels on an image. 
 \end{itemize}
 
 \begin{figure}[H]
@@ -28,23 +28,24 @@ However, even this simplified model of a lens camera is still too complicated to
 
 A pinhole camera is a simple camera without a lens. It instead relies on the use of a tiny hole as the aperture of the camera, and light rays pass through the hole, projecting an inverted image onto the image plane. The pinhole camera model is based on the pinhole camera, however it goes further by making the assumptions that the aperture is infinitely small. This means that any incoming light ray can only travel straight through the pinhole, and that a point in space can only map to one single point on image plane. 
 
+If necessary, one could reintroduce distortion and shear terms in order to minimize the error, but this is often not needed for low to medium precision applications, as the distortion of modern lenses are already minimal. As such, its ease of use has led it to become one of the most frequently employed camera models in the field of camera calibration. 
+
 \begin{figure}
     \centering
     \includegraphics[width=0.7\textwidth]{images/pinhole_vs_lens}
     \caption{Difference between a pinhole camera and a lens camera. Adapted from \cite{leCameraModel2018}}
 \end{figure}
 
-If necessary, one could reintroduce distortion and shear terms in order to minimize the error, but this is often not needed for low to medium precision applications, as the distortion of modern lenses are already minimal. As such, its ease of use has led it to become one of the most frequently employed camera models in the field of camera calibration. 
-
 \subsection{Calibration Object}
 
-The calibration object is an object with known dimensions 
+The calibration object is an object with known dimensions and features which is often used in camera calibration to 
 
 
 Calibration objects can be roughly separated into 3 categories, based on the dimension of the calibration object used \footcite{zhangCameraCalibration2007}:
 
 \begin{itemize}[leftmargin=!, itemindent=-4ex]
-    \item \textbf{3D} -- 
-    \item \textbf{2D} -- 
-    \item \textbf{1D} -- 
+    \item \textbf{3D object based calibration} -- Performed by using a calibration object whose geometry is known to very high precision. Typically, the calibration object consists of 2 or 3 orthogonal planes, although a plane whose precise translation is known may also be used, which also yields 3D reference points \footcite{zhangCameraCalibration2007}. Using 3D objects is typically preferred, as it yields the highest accuracy \footcite{zhangCameraCalibration2007}, and the mathematics required is also the least. 
+    \item \textbf{2D plane-based calibration} -- The most common technique is known as Zhang's method, and it requires a planar object (often a checkerboard pattern), and various pictures of this plane are taken at different orientations \footcite{zhangFlexibleNew2000}. Knowledge of the translation of the plane is not necessary. Due to its easier setup and good accuracy, it is the best choice in most situations. In fact, the most commonly used camera vision library, \texttt{OpenCV}, is geared towards this type of calibration. 
 \end{itemize}
+
+There also exists other calibration methods, notably self-calibration, which do not require calibration objects and simply rely on image correspondences. Although self-calibration does not require any calibration object, it also means that many parameters need to be estimated and optimized, and as such results in a much more complex mathematical problem. \footcite{zhangCameraCalibration2007}
