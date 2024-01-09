@@ -1,11 +1,11 @@
 \section{Projection Matrix} \label{sec:projection}
 
-When we combine the equation for the intrinsic transformation, $\vec{p}_i = K\vec{p}_c$ (eq. \ref{eq:pi}), with the equation for the extrinsic transformation, $\vec{p_c} = T\vec{p}_w$ (eq. \ref{eq:pc}), we obtain:
+When we combine the equation for the intrinsic transformation, $p_i = K\,p_c$ (eq. \ref{eq:pi}), with the equation for the extrinsic transformation, $p_c = [\,R\;|\;t\,]\,p_w$ (eq. \ref{eq:pc}), we obtain:
 \begin{equation} \label{eq:combined}
-    \vec{p}_{i} = KT\vec{p}_{w}
+    k\,p_{i} = K\,T\,p_{w}
 \end{equation}
 
-This single equation encapsulates the relationship between the world coordinates and its corresponding pixel coordinates. However, since that our goal is to solve for $K$ and $T$ for a particular camera when given the mappings of 3D coordinates to their pixel coordinates, it is much easier to solve for the matrix product $KT$ as opposed to each of the matrices individually. As such, we simplify our camera model by defining a new matrix, $P$, which is equal to the product $KT$. Since $K$ is a $3 \times 3$ matrix and $T$ is a $3 \times 4$ matrix, $KT$ yields a $3 \times 4$ matrix. 
+This single equation encapsulates the relationship between the world coordinates and its corresponding pixel coordinates. However, since that our goal is to solve for $K$ and $T$ for a particular camera when given the mappings of 3D coordinates to their pixel coordinates, it is much easier to solve for the matrix product $K\,T$ as opposed to each of the matrices individually. As such, we simplify our camera model by defining a new matrix, $P$, which is equal to the product $K\,T$. Since $K$ is a $3 \times 3$ matrix and $T$ is a $3 \times 4$ matrix, $K\,T$ yields a $3 \times 4$ matrix. 
 \begin{equation}
     \underbrace{
         \begin{bmatrix}
@@ -33,7 +33,7 @@ This single equation encapsulates the relationship between the world coordinates
 
 Replacing $P$ for $K\,T$ in equation \ref{eq:combined}, we obtain:
 \begin{equation} \label{eq:project}
-    \vec{p}_{i} = P\,\vec{p}_{w}
+    p_{i} = P\,p_{w}
 \end{equation}
 
 When expressing the pixel coordinate in homogenous coordinates, equation \ref{eq:project} becomes

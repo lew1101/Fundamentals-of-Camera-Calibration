@@ -28,12 +28,13 @@
 \usepackage{lastpage}
 \usepackage{subcaption}
 \usepackage{setspace}
+\usepackage{caption}
 \usepackage[title]{appendix}
 \usepackage{sectsty}
 \usepackage{titling}
 \usepackage{ragged2e}
-\usepackage{pdfpages}
 \usepackage{tablefootnote}
+\usepackage[section]{placeins}
 
 \usepackage{xcolor}
 \usepackage{graphicx}
@@ -68,7 +69,7 @@
 
 \fancypagestyle{mainmatter}{
     \fancyhf{}
-    \fancyhead[L]{\footnotesize\slshape\scshape\nouppercase{ \leftmark}}
+    \fancyhead[L]{\footnotesize\slshape\scshape\nouppercase{Section \leftmark}}
     \fancyhead[R]{\normalsize\thepage}
 }
 

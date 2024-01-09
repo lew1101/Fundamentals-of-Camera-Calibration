@@ -1,12 +1,13 @@
 \section{Approach} 
 
-There are countless different approaches one could take to calibrate a camera, 
+There are many techniques one could take to calibrate a camera, 
 
-A camera model is a projection model which approximates the function of a camera by describing a mathematical relationship between points in 3D space and its projection onto the sensor grid of the camera. In order to construct such a model, we must first understand the general workings of a camera.
 
-however they all build upon techniques first described in multiple highly influential papers, most notably Tsai's ``A Versatile Camera Calibration Technique for High-Accuracy 3D Machine Vision Metrology Using Off-the-shelf TV Cameras and Lenses'' and Zhang's ``A Flexible New Technique for Camera Calibration''. 
+
 
 \subsection{Camera Model} \label{sec:camera_model}
+
+A camera model is a projection model which approximates the function of a camera by describing a mathematical relationship between points in 3D space and its projection onto the sensor grid of the camera. In order to construct such a model, we must first understand the general workings of a camera.
 
 The modern lens camera is highly sophisticated, built with an array of complex mechanisms and a wide range of features such as zoom and autofocus. However, we only need to focus on its three principal elements critical to image projection: the lens, the aperture, and the sensor grid (CCD). 
 
@@ -22,7 +23,7 @@ The modern lens camera is highly sophisticated, built with an array of complex m
     \caption{Lens camera. Adapted from \cite{coltonPhysics1232012}} \label{fig:lens_camera}
 \end{figure}
 
-However, even this simplified model of a lens camera is still too complicated to describe, as it is impossible to encapsulate the complex behavior of a lens succinctly using one simple mathematical equation. As such, it is mathematically convenient to approximate the camera as a pinhole camera. In doing so, we ignore lens distortion, but it distills the behavior of a camera to its most fundamental and essential dynamics: the projection of points in 3D space onto the flat 2D sensor plane. 
+However, it is impossible to construct a model which is both simple and exact for the lens cameras, as the behavior of lenses are very complex. As such, it is mathematically convenient to approximate the camera as a pinhole camera. In doing so, we ignore lens distortion, but it distills the behavior of a camera to its most fundamental and essential dynamics: the projection of points in 3D space onto the flat 2D sensor plane. 
 
 \subsubsection{Pinhole Camera Model}
 
@@ -48,6 +49,6 @@ Calibration objects can be roughly separated into 3 categories, based on the dim
     \item \textbf{2D plane-based calibration} -- The most common technique is known as Zhang's method, and it requires a planar object (often a checkerboard pattern), and various pictures of this plane are taken at different orientations \footcite{zhangFlexibleNew2000}. Knowledge of the translation of the plane is not necessary. Due to its easier setup and good accuracy, it is the best choice in most situations. In fact, the most commonly used camera vision library, \texttt{OpenCV}, is geared towards this type of calibration. 
 \end{itemize}
 
-There also exists other calibration methods, notably self-calibration, which do not require calibration objects and simply rely on image correspondences. Although self-calibration does not require any calibration object, it also means that many parameters need to be estimated and optimized, and as such results in a much more complex mathematical problem. \footcite{zhangCameraCalibration2007}
+There also exists other calibration methods, notably self-calibration, which do not require calibration objects and simply rely on image correspondences. Although self-calibration does not require any calibration object, it also means that many parameters need to be estimated and optimized, and as such results in a much more complex mathematical problem \footcite{zhangCameraCalibration2007}.
 
 For this paper, I will focus on calibration using a 3D calibration object, because the mathematics behind it is simpler, and many of the techniques used in 3D-based calibration are 

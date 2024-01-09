@@ -1,136 +1,45 @@
 \section{Constructing the Pinhole Camera Model}
 
-For our camera model, we will introduce 4 different frames of reference, all of which :
-\begin{itemize}[leftmargin=!, itemindent=-4ex]
-    \item\textbf{World Coordinate Frame ($\boldsymbol{\mathcal{W}}$)}. Represents the 3D space of the scene being photographed, with respect to an origin which may be arbitrary and depends on the conventions chosen. Objects that are in the scene are defined with respect to this coordinate frame. 
-    \item\textbf{Camera Coordinate Frame ($\boldsymbol{\mathcal{C}}$)}. Represents the 3D space of the scene being photographed, but with respect to the pinhole (aperture) of the camera. 
-    \item\textbf{Image Coordinate Frame ($\boldsymbol{\Pi}$)}. 2D plane representing the image sensor plane of the camera. The origin is the principle point of the image sensor, where the optical axis intersects the image plane. 
-    \item\textbf{Pixel Coordinate Frame}. 2D plane representing the position of pixels on the image sensor. The Discrete version of the image coordinate frame, where c
-\end{itemize}
-
-The optical axis of a camera is an imaginary line which passes through the center of the aperture of the camera. 
-
-
-
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\textwidth]{figures/imaging_model}
+    \includegraphics[width=\textwidth]{diagrams/imaging_model}
     \caption{Pinhole camera model.}
 \end{figure}
 
+For our camera model, we will introduce 4 different frames of reference, all of which :
+\begin{itemize}[leftmargin=!, itemindent=-4ex]
+    \item\textbf{World Coordinate Frame ($\boldsymbol{\mathcal{W}}$)}. Represents the 3D space of the scene being photographed, with respect to an origin which may be arbitrary and depends on the conventions chosen. Objects that are in the scene are defined with respect to this coordinate frame.
+    \item\textbf{Camera Coordinate Frame ($\boldsymbol{\mathcal{C}}$)}. Represents the 3D space of the scene being photographed, but with respect to the pinhole (aperture) of the camera.
+    \item\textbf{Image Coordinate Frame ($\boldsymbol{\Pi}$)}. 2D plane representing the image sensor plane of the camera. The origin is the principle point of the image sensor, where the optical axis intersects the image plane.
+    \item\textbf{Pixel Coordinate Frame}. 2D plane representing the position of pixels on the image sensor. The Discrete version of the image coordinate frame, where c
+\end{itemize}
+
+The optical axis of a camera is an imaginary line which passes through the center of the aperture of the camera.
+
+
+
+
+
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\textwidth]{figures/coord_conversions}
+    \includegraphics[width=0.9\textwidth]{diagrams/coord_conversions}
     \caption{Coordinate transformations.}
 \end{figure}
 
 
-\subsection{Extrinsic Parameters} \label{sec:extrinsics}
-
-First, we need to establish the relationship between position of a point in the camera coordinate frame $\mathcal{C}$ to their position in the world coordinate frame $\mathcal{W}$. To do so, we find the extrinsic matrix $T$, which relates the positional vector $\vec{p}_w$ of point $P$, to its positional vector.
-\begin{equation} \label{eq:pc}
-    \vec{p}_c = T\vec{p}_w
-\end{equation}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.9\textwidth]{figures/coord_transform}
-    \caption{Coordinate transformation from the world coordinate frame to the camera frame.}
-\end{figure}
-
-
-For the extrinsic parameters of the camera, we have the position $\vec{c}_w$ of the camera in world coordinates and orientation $R$ of the camera. The orientation, $R$, is a 3x3 rotational matrix:
-
-\begin{equation}
-    R =
-    \begin{bmatrix}
-        r_{11} & r_{12} & r_{13} \\
-        r_{21} & r_{22} & r_{23} \\
-        r_{31} & r_{32} & r_{33}
-    \end{bmatrix}
-\end{equation}
-
-\noindent where:
-\begin{itemize}
-    \item Row 1: Direction of $\hat{x}_c$ in world coordinate frame.
-    \item Row 2: Direction of $\hat{y}_c$ in world coordinate frame.
-    \item Row 3: Direction of $\hat{z}_c$ in world coordinate frame.
-\end{itemize}
-
-\noindent
-
-\begin{subequations}
-    \begin{align}
-        \vec{p}_c & = R(\vec{p}_w-\vec{c}_w) \\
-                  & = R\vec{p}_w -R\vec{c}_w
-    \end{align}
-\end{subequations}
-
-
-
-\begin{gather}
-    \vec{p}_c = R\vec{p}_w + \vec{t} \\
-    \begin{bmatrix}
-        x_c \\ y_c \\ z_c
-    \end{bmatrix}
-    =
-    \underbrace{
-        \begin{bmatrix}
-            r_{11} & r_{12} & r_{13} \\
-            r_{21} & r_{22} & r_{23} \\
-            r_{31} & r_{32} & r_{33}
-        \end{bmatrix}
-    }_{\mathlarger{R}}
-    \begin{bmatrix}
-        x_w \\ y_w \\ z_w
-    \end{bmatrix}
-    +
-    \underbrace{
-        \begin{bmatrix}
-            t_x \\ t_y \\ t_z
-        \end{bmatrix}
-    }_{\mathlarger{\vec{t}}}
-\end{gather}
-
-
-\begin{equation}
-    \begin{bmatrix}
-        x_c \\ y_c \\ z_c 
-    \end{bmatrix}
-    =
-    \underbrace{
-        \begin{bmatrix}
-            r_{11} & r_{12} & r_{13} & t_x \\
-            r_{21} & r_{22} & r_{23} & t_y \\
-            r_{31} & r_{32} & r_{33} & t_z \\
-        \end{bmatrix}
-    }_{\mathlarger{T}}
-    \begin{bmatrix}
-        x_w \\ y_w \\ z_w \\ 1
-    \end{bmatrix}
-\end{equation}
-
-\begin{equation}
-    T = \left[\,R\,\vert\,\vec{t}\:\right]
-\end{equation}
-
-
 \subsection{Intrinsic Parameters} \label{sec:intrinsics}
 
-Intrinsic parameters describe the internal characteristics of the camera. In other words, it dictates how in the 3D space are projected onto the image plane. We As such, our goal is to construct a calibration matrix, $K$, which relates the position of the point $P$ to its projection on the image plane. This can be expressed mathematically as follows:
-\begin{equation} \label{eq:pi}
-    \vec{p}_i =  K\vec{p}_c
-\end{equation}
-where $\vec{p}_i$ and $\vec{p}_c$ represents the position of the point $P$ on the image plane $\Pi$ and the camera frame $\mathcal{C}$ respectively.
+Intrinsic parameters describe the internal characteristics of the camera. In other words, it dictates how in the 3D space are projected onto the image plane. As such, our goal is to relate the position of the point $\mathtt{X}$ to its projection on the image plane.
+
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\textwidth]{figures/perspective_projection}
-    \caption{Perspective projection of the point $P$ onto the image plane $\Pi$.}
+    \includegraphics[width=0.9\textwidth]{diagrams/perspective_projection}
+    \caption{Perspective projection of the point $\mathtt{X}$ onto the image plane $\Pi$.}
 \end{figure}
-When a straight line is drawn from $P$ to its projection $P_i$ through the aperture, it intersects the optical axis. Deconstructing this intersection in the $x$ and $y$ direction, pairs of similar triangles are formed, which relates $x_i$ to $x_c$ and $y_i$ to $y_c$.
+When a straight line is drawn from $\mathtt{X}$ to its projection $\mathtt{X_i}$ through the aperture, it intersects the optical axis. Deconstructing this intersection in the $x$ and $y$ direction, pairs of similar triangles are formed, which relates $x_i$ to $x_c$ and $y_i$ to $y_c$.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{figures/similar_triangles}
+    \includegraphics[width=\textwidth]{diagrams/similar_triangles}
     \caption{Similar triangles formed by perspective projection, which relate $x_i$ to $x_c$ and $y_i$ to $y_c$.} \label{fig:similar_triangles}
 \end{figure}
 \begin{subequations}
@@ -139,13 +48,13 @@ When a straight line is drawn from $P$ to its projection $P_i$ through the apert
         \frac{y_i}{f} = \frac{y_c}{z_c} \quad \Longrightarrow \quad y_i = f \frac{y_c}{z_c} \label{subeq:yi_result}
     \end{gather}
 \end{subequations}
-Once the coordinates of the point projection, $(x_i, y_i)$, is known, we then need to convert it to actual pixel position of the point on the image, $(u, v)$. Pixel coordinates are measured in pixels, from the left-hand corner of the image. This is the convention that is typically followed in computer graphics. As such, there will be an offset in pixels, $(c_x, c_y)$, which represents the optical center of the image (i.e. the point at which the optical axis intersects the image plane). Additionally, the relationship between $(x_i, y_i)$ and $(u, v)$ is proportional, but they scale at different rates, as $(x_i, y_i)$ can be measured using any unit measurement, and can have negative and decimal values. On the other hand, $(u,v)$ are measured in discrete pixel value, which can different sizes depending on the camera used. As such, we define scaling factors, $m_x$ and $m_y$, be scaling factors which represent the pixel density of the image sensor in the $x$ and $y$ axes of the image sensor plane respectively. 
+Once the coordinates of the point projection, $(x_i, y_i)$, is known, we then need to convert it to actual pixel position of the point on the image, $(u, v)$. Pixel coordinates are measured in pixels, from the left-hand corner of the image. This is the convention that is typically followed in computer graphics. As such, there will be an offset in pixels, $(c_x, c_y)$, which represents the optical center of the image (i.e. the point at which the optical axis intersects the image plane). Additionally, the relationship between $(x_i, y_i)$ and $(u, v)$ is proportional, but they scale at different rates, as $(x_i, y_i)$ can be measured using any unit measurement, and can have negative and decimal values. On the other hand, $(u,v)$ are measured in discrete pixel value, which can different sizes depending on the camera used. As such, we define scaling factors, $m_x$ and $m_y$, be scaling factors which represent the pixel density of the image sensor in the $x$ and $y$ axes of the image sensor plane respectively.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{figures/sensor_grid}
+    \includegraphics[width=\textwidth]{diagrams/sensor_grid}
     \caption{Conversion from image plane coordinates to sensor grid coordinates}
 \end{figure}
-Putting all the ideas above together, we can construct a set of linear parametric equations relating the pixel coordinates to their image coordinates thus: 
+Putting all the ideas above together, we can construct a set of linear parametric equations relating the pixel coordinates to their image coordinates thus:
 \begin{align*}
     u = m_x x_i + c_x \\
     v = m_y y_i + c_y
@@ -167,7 +76,7 @@ Multiply both sides of the equations by $z_c$.
         z_c v = f_y y_c + z_c c_y
     \end{gather*}
 \end{subequations}
-Doing so allows us to express the relationship as a matrix transformation using homogenous coordinates, by letting $\widetilde{w} = z_c$. 
+Doing so allows us to express the relationship as a matrix transformation using homogenous coordinates, by letting $\widetilde{w} = z_c$.
 \begin{equation}
     \begin{bmatrix}
         z_c u \\ z_c v \\ z_c
@@ -177,27 +86,115 @@ Doing so allows us to express the relationship as a matrix transformation using 
         f_x x_c + z_c c_x \\ f_y y_c + z_c c_y \\ z_c
     \end{bmatrix}
     =
-    \underbrace{
-        \begin{bmatrix}
-            f_x & 0   & c_x \\
-            0   & f_y & c_y \\
-            0   & 0   & 1
-        \end{bmatrix}
-    }_{\mathlarger{K}}
+    \begin{bmatrix}
+        f_x & 0   & c_x \\
+        0   & f_y & c_y \\
+        0   & 0   & 1
+    \end{bmatrix}
     \begin{bmatrix}
         x_c \\ y_c \\ z_c
     \end{bmatrix}
 \end{equation}
-
+This can be represented simply with:
 \begin{equation}
-    K =
+    \widetilde{p}_i = K\, p_c
+    \,,\qquad\text{with } K =
     \begin{bmatrix}
         f_x & 0   & c_x \\
         0   & f_y & c_y \\
         0   & 0   & 1
     \end{bmatrix}
 \end{equation}
-In this case, $K$ is what is known as the \emph{calibration matrix}. It is a matrix transformation which maps a point represented in the camera coordinate frame to the coordinates of their projection onto the sensor plane. 
+In this case, $K$ is what is known as the \emph{calibration matrix}. It is a matrix transformation which maps a point represented in the camera coordinate frame to the coordinates of their projection onto the sensor plane.
+
+
+
+\subsection{Extrinsic Parameters} \label{sec:extrinsics}
+
+Extrinsic parameters describe the orientation of the camera, which is commonly referred to as the extrinsic parameters of a camera. Possible movements include 
+establish the relationship between position of a point in the camera coordinate frame $\mathcal{C}$ to their position in the world coordinate frame $\mathcal{W}$. To do so, we find the extrinsic matrix $T$, which relates the position of a
+relates the positional vector $p_w$ of point $\mathtt{X}$, to its positional vector.
+\begin{equation} \label{eq:pc}
+    p_c = [\,R\;|\;t\,]\,p_w
+\end{equation}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{diagrams/coord_transform}
+    \caption{Coordinate transformation of $\mathtt{X}$ from $\mathcal{W}$ to $\mathcal{C}$.}
+\end{figure}
+
+
+For the extrinsic parameters of the camera, we have the position $c_w$ of the camera in world coordinates and orientation $R$ of the camera. The orientation, $R$, is a 3x3 rotational matrix:
+
+\begin{equation}
+    R =
+    \begin{bmatrix}
+        r_{11} & r_{12} & r_{13} \\
+        r_{21} & r_{22} & r_{23} \\
+        r_{31} & r_{32} & r_{33}
+    \end{bmatrix}
+\end{equation}
+
+\noindent where:
+\begin{itemize}
+    \item Row 1: Direction of $\hat{x}_c$ in world coordinate frame.
+    \item Row 2: Direction of $\hat{y}_c$ in world coordinate frame.
+    \item Row 3: Direction of $\hat{z}_c$ in world coordinate frame.
+\end{itemize}
+
+\noindent
+
+\begin{subequations}
+    \begin{align}
+        p_c & = R\,(p_w-c_w)   \\
+            & = R\,p_w -R\,c_w
+    \end{align}
+\end{subequations}
+
+
+
+\begin{gather}
+    p_c = R\,p_w + t \\
+    \begin{bmatrix}
+        x_c \\ y_c \\ z_c
+    \end{bmatrix}
+    =
+    \underbrace{
+        \begin{bmatrix}
+            r_{11} & r_{12} & r_{13} \\
+            r_{21} & r_{22} & r_{23} \\
+            r_{31} & r_{32} & r_{33}
+        \end{bmatrix}
+    }_{\mathlarger{R}}
+    \begin{bmatrix}
+        x_w \\ y_w \\ z_w
+    \end{bmatrix}
+    +
+    \underbrace{
+        \begin{bmatrix}
+            t_x \\ t_y \\ t_z
+        \end{bmatrix}
+    }_{\mathlarger{t}}
+\end{gather}
+
+
+\begin{equation}
+    \begin{bmatrix}
+        x_c \\ y_c \\ z_c
+    \end{bmatrix}
+    =
+    \underbrace{
+        \begin{bmatrix}
+            r_{11} & r_{12} & r_{13} & t_x \\
+            r_{21} & r_{22} & r_{23} & t_y \\
+            r_{31} & r_{32} & r_{33} & t_z \\
+        \end{bmatrix}
+    }_{\mathlarger{[\,R\;|\;t\,]}}
+    \begin{bmatrix}
+        x_w \\ y_w \\ z_w \\ 1
+    \end{bmatrix}
+\end{equation}
 
 
 

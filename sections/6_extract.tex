@@ -5,12 +5,12 @@ Once we have solved for the projection for the projection matrix $P$, we can the
 An important property worth noting is that $K$ is an \emph{upper triangular matrix}. It is a special kind of square matrix with all of its non-zero entries above the main diagonal. This is an important property which we will exploit when extracting the $K$ from the projection matrix in section \ref{sec:projection}.
 
 \begin{align}
-    P & = K\left[\,R \,\vert\, \vec{t}\:\,\right]       \nonumber \\
-      & = K\left[\,R \,\vert\,-R\vec{c_w}\,\right]      \nonumber \\
-      & = \left[\,K\!R\,\vert\,-K\!R\vec{c_w}\,\right]
+    P & = K\,[\,R\;|\;t\,]     \nonumber \\
+      & = K\,[\,R\;|\;-Rc_w\,]    \nonumber \\
+      & = [\,KR\;|\;-KRc_w\,]
 \end{align}
 \begin{equation}
-    P = \left[\,Q \,\vert\,-Q\vec{c_w}\,\right]
+    P = [\,Q\;|\;-Qc_w\,] 
 \end{equation}
 
 \begin{equation*}
@@ -48,11 +48,11 @@ Since
 \subsection{Extracting the Translation Vector}
 
 \begin{gather}
-    -Q\vec{c_w} =
+    -Qc_w =
     \begin{bmatrix}
         p_{14} \\ p_{24} \\ p_{34}
     \end{bmatrix} \nonumber \\
-    \Rightarrow \vec{c_w} = -Q^{-1}
+    \Rightarrow c_w = -Q^{-1}
     \begin{bmatrix}
         p_{14} \\ p_{24} \\ p_{34}
     \end{bmatrix}
