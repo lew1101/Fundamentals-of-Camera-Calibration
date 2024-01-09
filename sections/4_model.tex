@@ -29,7 +29,7 @@ The optical axis of a camera is an imaginary line which passes through the cente
 
 \subsection{Intrinsic Parameters} \label{sec:intrinsics}
 
-Intrinsic parameters describe the internal characteristics of the camera. In other words, it dictates how in the 3D space are projected onto the image plane. As such, our goal is to relate the position of the point $\mathtt{X}$ to its projection on the image plane.
+Intrinsic parameters describe the internal characteristics of the camera. In other words, it dictates how in the 3D space are projected onto the image plane, i.e. the relationship between the position of the point $\mathtt{X}$ to its projection on the image plane.
 
 \begin{figure}[H]
     \centering
@@ -86,46 +86,35 @@ Doing so allows us to express the relationship as a matrix transformation using 
         f_x x_c + z_c c_x \\ f_y y_c + z_c c_y \\ z_c
     \end{bmatrix}
     =
-    \begin{bmatrix}
-        f_x & 0   & c_x \\
-        0   & f_y & c_y \\
-        0   & 0   & 1
-    \end{bmatrix}
+    \underbrace{
+        \begin{bmatrix}
+            f_x & 0   & c_x \\
+            0   & f_y & c_y \\
+            0   & 0   & 1
+        \end{bmatrix}
+    }_{\mathlarger{K}}
     \begin{bmatrix}
         x_c \\ y_c \\ z_c
     \end{bmatrix}
 \end{equation}
 This can be represented simply with:
-\begin{equation}
-    \widetilde{p}_i = K\, p_c
-    \,,\qquad\text{with } K =
-    \begin{bmatrix}
-        f_x & 0   & c_x \\
-        0   & f_y & c_y \\
-        0   & 0   & 1
-    \end{bmatrix}
-\end{equation}
+\begin{gather}
+    k\,\widetilde{p}_i = K\, p_c \label{eq:pi}
+\end{gather}
 In this case, $K$ is what is known as the \emph{calibration matrix}. It is a matrix transformation which maps a point represented in the camera coordinate frame to the coordinates of their projection onto the sensor plane.
-
-
 
 \subsection{Extrinsic Parameters} \label{sec:extrinsics}
 
-Extrinsic parameters describe the orientation of the camera, which is commonly referred to as the extrinsic parameters of a camera. Possible movements include 
-establish the relationship between position of a point in the camera coordinate frame $\mathcal{C}$ to their position in the world coordinate frame $\mathcal{W}$. To do so, we find the extrinsic matrix $T$, which relates the position of a
-relates the positional vector $p_w$ of point $\mathtt{X}$, to its positional vector.
-\begin{equation} \label{eq:pc}
-    p_c = [\,R\;|\;t\,]\,p_w
-\end{equation}
+Extrinsic parameters describe the orientation of the camera. As such, they can be used to describe the relationship between the position of a point in the world coordinate frame and its coordinates relative to the camera.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{diagrams/coord_transform}
-    \caption{Coordinate transformation of $\mathtt{X}$ from $\mathcal{W}$ to $\mathcal{C}$.}
+    \caption{Coordinate transformation of $\mathtt{X}$ from the world coordinate frame to the camera coordinate frame.}
 \end{figure}
 
 
-For the extrinsic parameters of the camera, we have the position $c_w$ of the camera in world coordinates and orientation $R$ of the camera. The orientation, $R$, is a 3x3 rotational matrix:
+There are two possible types of movement affecting the orientation of the camera: rotation and translation. The rotation of the camera can be described using a $3 \times 3$ rotational matrix:
 
 \begin{equation}
     R =
@@ -138,63 +127,54 @@ For the extrinsic parameters of the camera, we have the position $c_w$ of the ca
 
 \noindent where:
 \begin{itemize}
-    \item Row 1: Direction of $\hat{x}_c$ in world coordinate frame.
-    \item Row 2: Direction of $\hat{y}_c$ in world coordinate frame.
-    \item Row 3: Direction of $\hat{z}_c$ in world coordinate frame.
+    \item Row 1: Unit vector representing $\hat{x}_c$ after rotation.
+    \item Row 2: Unit vector representing $\hat{y}_c$ after rotation.
+    \item Row 3: Unit vector representing $\hat{z}_c$ after rotation.
 \end{itemize}
-
-\noindent
-
-\begin{subequations}
-    \begin{align}
-        p_c & = R\,(p_w-c_w)   \\
-            & = R\,p_w -R\,c_w
-    \end{align}
-\end{subequations}
-
-
-
-\begin{gather}
-    p_c = R\,p_w + t \\
+\begin{align}
+    p_c & = R\,(p_w-c_w) \nonumber        \\
+        & = R\,p_w -R\,c_w \label{eq:ext}
+\end{align}
+Replacing $R\,c_w$ with a vector $t$, where $t$ represents the translation of the camera from the origin, we can rewrite equation \ref{eq:ext}:
+\begin{equation}
+    p_c = R\,p_w + t
+\end{equation}
+This can be equivalently written as thus:
+\begin{equation*}
     \begin{bmatrix}
         x_c \\ y_c \\ z_c
     \end{bmatrix}
     =
-    \underbrace{
-        \begin{bmatrix}
-            r_{11} & r_{12} & r_{13} \\
-            r_{21} & r_{22} & r_{23} \\
-            r_{31} & r_{32} & r_{33}
-        \end{bmatrix}
-    }_{\mathlarger{R}}
+    \begin{bmatrix}
+        r_{11} & r_{12} & r_{13} \\
+        r_{21} & r_{22} & r_{23} \\
+        r_{31} & r_{32} & r_{33}
+    \end{bmatrix}
     \begin{bmatrix}
         x_w \\ y_w \\ z_w
     \end{bmatrix}
     +
-    \underbrace{
-        \begin{bmatrix}
-            t_x \\ t_y \\ t_z
-        \end{bmatrix}
-    }_{\mathlarger{t}}
-\end{gather}
-
-
+    \begin{bmatrix}
+        t_x \\ t_y \\ t_z
+    \end{bmatrix}
+\end{equation*}
+When written like this, it is much easier to see that we can combine the parameters of $R$ and $t$ into one single $3 \times 4$ matrix, by expressing $p_w$ in homogenous coordinates.
 \begin{equation}
     \begin{bmatrix}
         x_c \\ y_c \\ z_c
     \end{bmatrix}
     =
-    \underbrace{
-        \begin{bmatrix}
-            r_{11} & r_{12} & r_{13} & t_x \\
-            r_{21} & r_{22} & r_{23} & t_y \\
-            r_{31} & r_{32} & r_{33} & t_z \\
-        \end{bmatrix}
-    }_{\mathlarger{[\,R\;|\;t\,]}}
+    \begin{bmatrix}
+        r_{11} & r_{12} & r_{13} & t_x \\
+        r_{21} & r_{22} & r_{23} & t_y \\
+        r_{31} & r_{32} & r_{33} & t_z \\
+    \end{bmatrix}
     \begin{bmatrix}
         x_w \\ y_w \\ z_w \\ 1
     \end{bmatrix}
 \end{equation}
-
-
+Thus, we arrive at the final equation:
+\begin{equation}
+    p_c=T\,\widetilde{p}_w\,, \qquad \text{with } T=[\,K\;|\;t\,] \label{eq:pc}
+\end{equation}
 
