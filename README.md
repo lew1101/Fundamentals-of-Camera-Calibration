@@ -24,8 +24,7 @@ Make sure you have `latexmk` installed on your machine. Then, `cd` into the proj
 
 ```shell
 cd Fundamentals-of-Camera-Calibration
-
-sh build.sh
+./build.sh
 ```
 
 ## Author
