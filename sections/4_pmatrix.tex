@@ -1,0 +1,159 @@
+\section{Projection Matrix} \label{sec:projection}
+
+When we combine the equation for the intrinsic transformation, $\widetilde{p}_i = aK\,p_c$ for $a \in \Real$ and $a \neq 0$ (eq. \ref{eq:pi}), with the equation for the extrinsic transformation, $p_c = [R\,|\,t\,]\,\widetilde{p}_w$ (eq. \ref{eq:pc}), we obtain:
+\begin{equation} \label{eq:combined}
+    \widetilde{p}_{i} = aK\,[R\,|\,t\,]\,\widetilde{p}_{w} \eqrestriction{a \in \Real, a \neq 0}
+\end{equation}
+
+This single equation encapsulates the relationship between the world coordinates and its corresponding pixel coordinates. We can then further simplify our camera model by defining a new matrix, $P$, which is equivalent to the product $K\,[R\,|\,t\,]$. Since $K$ is a $3 \times 3$ matrix and $[R\,|\,t\,]$ is a $3 \times 4$ matrix, the matrix product $K[R\,|\,t\,]$ yields a $3 \times 4$ matrix. 
+\begin{equation}
+    \underbrace{
+        \begin{bmatrix}
+        p_{11} & p_{12} & p_{13} & p_{14} \\
+        p_{21} & p_{22} & p_{23} & p_{24} \\
+        p_{31} & p_{32} & p_{33} & p_{34}
+    \end{bmatrix}
+    }_{\mathlarger{P}}
+    \equiv
+    a
+    \underbrace{
+        \begin{bmatrix}
+            f_x & 0   & c_x \\
+            0   & f_y & c_y \\
+            0   & 0   & 1
+        \end{bmatrix}
+    }_{\mathlarger{K}}
+    \underbrace{
+        \begin{bmatrix}
+            r_{11} & r_{12} & r_{13} & t_x \\
+            r_{21} & r_{22} & r_{23} & t_y \\
+            r_{31} & r_{32} & r_{33} & t_z \\
+        \end{bmatrix}
+    }_{\mathlarger{[R\,|\,t\,]}}
+\end{equation}
+Replacing $P$ for $K\,[R\,|\,t\,]$ in equation \ref{eq:combined}, we obtain:
+\begin{equation} \label{eq:project}
+    \widetilde{p}_{i} = aP\,\widetilde{p}_{w}
+\end{equation}
+Equivalently:
+\begin{equation} \label{eq:proj}
+    \begin{bmatrix}
+        \widetilde{u}_n \\ \widetilde{v}_n \\ \widetilde{w}_n
+    \end{bmatrix}
+    =
+    a
+    \begin{bmatrix}
+        p_{11} & p_{12} & p_{13} & p_{14} \\
+        p_{21} & p_{22} & p_{23} & p_{24} \\
+        p_{31} & p_{32} & p_{33} & p_{34}
+    \end{bmatrix}
+    \begin{bmatrix}
+        x_w^{(n)} \\ y_w^{(n)} \\ z_w^{(n)} \\ 1
+    \end{bmatrix}
+\end{equation}
+
+The implications of this equation is very important, as it means that a $3 \times 4$ matrix is sufficient in describing the relationship between a point in the world coordinate frame to its projection onto the image plane in pixel coordinates.
+
+\subsection{Solving for the Projection Matrix}
+
+Now, we need to devise a way to solve for the projection matrix. Since we know that the projection matrix describes relationship between a point and their projection, we can go backwards and solve for the projection matrix given a set of points and their corresponding projections. Rewriting the matrix equation \ref{eq:project} as a set of parametric equations and letting $a=1$ for now, we obtain:
+\begin{align*}
+    \widetilde{u}_n = p_{11}x_w^{(n)} + p_{12}y_w^{(n)} + p_{13}z_w^{(n)} + p_{14} \\
+    \widetilde{v}_n = p_{21}x_w^{(n)} + p_{22}y_w^{(n)} + p_{23}z_w^{(n)} + p_{24} \\
+    \widetilde{w}_n = p_{31}x_w^{(n)} + p_{32}y_w^{(n)} + p_{33}z_w^{(n)} + p_{34}
+\end{align*}
+We convert the set of equations back to their inhomogeneous form by recognizing the fact that $u_n = \nicefrac{\widetilde{u}_n}{\widetilde{w}_n}$ and $v_n = \nicefrac{\widetilde{v}_n}{\widetilde{w}_n}$. 
+\begin{align*}
+    u_n & = \frac{p_{11}x_w^{(n)} + p_{12}y_w^{(n)} + p_{13}z_w^{(n)} + p_{14}}{p_{31}x_w^{(n)} + p_{32}y_w^{(n)} + p_{33}z_w^{(n)} + p_{34}} \\
+    v_n & = \frac{p_{21}x_w^{(n)} + p_{22}y_w^{(n)} + p_{23}z_w^{(n)} + p_{24}}{p_{31}x_w^{(n)} + p_{32}y_w^{(n)} + p_{33}z_w^{(n)} + p_{34}}
+\end{align*}
+For both equations, multiply both sides by the denominator.
+\begin{align*}
+    u_n(p_{31}x_w^{(n)} + p_{32}y_w^{(n)} + p_{33}z_w^{(n)} + p_{34}) = p_{11}x_w^{(n)} + p_{12}y_w^{(n)} + p_{13}z_w^{(n)} + p_{14} \\
+    v_n(p_{31}x_w^{(n)} + p_{32}y_w^{ (n)} + p_{33}z_w^{(n)} + p_{34}) = p_{21}x_w^{(n)} + p_{22}y_w^{(n)} + p_{23}z_w^{(n)} + p_{24}
+\end{align*}
+Bringing all the terms onto one side:
+\begin{subequations}
+    \begin{align}
+        0 = p_{11}x_w^{(n)} + p_{12}y_w^{(n)} + p_{13}z_w^{(n)} + p_{14} - p_{31}u_nx_w^{(n)} - p_{32}u_ny_w^{(n)} - p_{33}u_nz_w^{(n)} - p_{34}u_n \\
+        0 = p_{21}x_w^{(n)} + p_{22}y_w^{(n)} + p_{23}z_w^{(n)} + p_{24} - p_{31}v_nx_w^{(n)} - p_{32}v_ny_w^{(n)} - p_{33}v_nz_w^{(n)} - p_{34}v_n
+    \end{align}
+\end{subequations}
+We then need to recognize the fact that this 
+
+\setcounter{MaxMatrixCols}{20}
+\begin{equation}
+    \scalemath{0.9}{
+    \begin{bmatrix}
+        0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0
+    \end{bmatrix}
+    =
+    \underbrace{
+        \begin{blockarray}{[*{12}c]}
+            x_w^{(1)} & y_w^{(1)} & z_w^{(1)} & 1 & 0         & 0         & 0         & 0 & -u_1 x_w^{(1)} & -u_1 y_w^{(1)} & -u_1 z_w^{(1)} & -u_1 \\
+            0         & 0         & 0         & 0 & x_w^{(1)} & y_w^{(1)} & z_w^{(1)} & 1 & -v_1 x_w^{(1)} & -v_1 y_w^{(1)} & -v_1 z_w^{(1)} & -v_1 \\
+            \BAmulticolumn{6}{c}{\vdots} & \BAmulticolumn{6}{c}{\vdots} \\
+            x_w^{(n)} & y_w^{(n)} & z_w^{(n)} & 1 & 0         & 0         & 0         & 0 & -u_n x_w^{(n)} & -u_n y_w^{(n)} & -u_n z_w^{(n)} & -u_n \\
+            0         & 0         & 0         & 0 & x_w^{(n)} & y_w^{(n)} & z_w^{(n)} & 1 & -v_n x_w^{(n)} & -v_n y_w^{(n)} & -v_n z_w^{(n)} & -v_n
+        \end{blockarray}
+    }_{\mathlarger{G}}
+    \underbrace{
+        \begin{bmatrix}
+            p_{11} \\ p_{12} \\ p_{13} \\ p_{14} \\ p_{21} \\ p_{22} \\ p_{23} \\ p_{24} \\ p_{31} \\ p_{32} \\ p_{33} \\ p_{34}
+        \end{bmatrix}
+    }_{\mathlarger{p}}
+    }
+\end{equation}
+where $G$ is a $2n \times 12$ matrix, $n \in \Integer^+$, and $p$ is the matrix vectorization of $P$. This system has 12 degrees of freedom, and since each point yields two equations, a minimum of 6 sets of points and their corresponding image projections are necessary in order to solve the system. When using 6 correspondences, a unique solution can be obtained using classical approaches, such as using 
+\textbf{Gaussian elimination}. But since we want to minimize uncertainty and achieve a solution which is as accurate as possible, we want to use as many correspondences as possible. 
+
+When using more the 6 correspondences, we have more equations than unknowns. Such systems are \emph{overdetermined}, and generally have no solutions \footcite{williamsOverdeterminedSystems1990}. However, we can optimize to obtain the "best approximate solution" using a method such as the \hyperref[sec:clss]{\textbf{least-squares method}}. 
+
+\subsection{Constrained Least-Squares Solution} \label{sec:clss}
+
+First, we must clarify what a "best approximate solution" is. 
+\begin{definition}X
+    Let $A$ be an $m \times n$ matrix and let $b$ be a vector in $\Real^m$. A \textbf{least-squares solution} of the matrix equation $Ax = b$ is a vector $\widehat{x}$ such that:
+    \begin{equation*}
+        \mathrm{dist}(b, A\widehat{x}) \leq \mathrm{dist}(b, Ax) \qquad \forall x \in \Real^m
+    \end{equation*}
+\end{definition}
+
+The term least-squares solution comes from the fact that $\mathrm{dist}(b, A\widehat{x})= \Vert b - A\widehat{x} \Vert$ is the square root of the sum of the squares of the entries of the vector $b - A\widehat{x}$. In other words, a least-squares solution solve a matrix equation as closely as possible by minimizing the sum of the squares of the differences between the entries of $A\widehat{x}$ and $b$. \footcite{margalitMethodLeast}
+
+Returning to our specific problem, we can apply least-squares method by minimizing $\Vert Gp \Vert^2$. We minimize $\Vert Gp \Vert^2$ because we recognize that minimizing the square of the magnitude is equivalent to minimizing the magnitude itself, and that for a given vector $v$, it is easier to compute $\Vert v \Vert^2$ instead of $\Vert v \Vert$ since it eliminates the square root:
+\begin{equation*}
+    \Vert v \Vert^2
+     = \left(\sqrt{v_1^2+v_2^2+ \cdots v_n^2}\right)^2 
+     = v_1^2+v_2^2+ \cdots v_n^2 
+     = \begin{bmatrix}
+        v_1 & v_2 & \cdots & v_n
+    \end{bmatrix}
+    \begin{bmatrix}
+        v_1 \\ v_2 \\ \vdots \\ v_n
+    \end{bmatrix} 
+     = v^\T v
+\end{equation*}
+$v^\T$ represents the \emph{transpose} of $v$, i.e. swapping its rows and columns, transforming a row vector into a column vector or vice versa.
+
+However, we need to further constrain the problem since the projection matrix $P$ is applied onto homogenous coordinates, where the property holds that multiplying the homogenous coordinate of a point by a non-zero scalar still represents the same point\footnote{See Appendix \ref{sec:homogenous}.}. This means that there is an infinite amount of solutions, because once we have found a valid solution for $P$, we can always multiply $P$ by a non-zero scalar $k$ and still yield a valid solution, i.e. $P \equiv kP$. As such, any solution for $P$ is only defined to a certain scale factor $k$. To mitigate this, we arbitrarily set the condition that $\Vert p \Vert^2$ must equal 1. Thus:
+\begin{equation*} \label{eq:min1}
+    \optmin{p}{\lVert Gp \rVert^2}{\lVert p \rVert^2 = 1}
+\end{equation*}
+Equivalently:
+\begin{equation} \label{eq:min2}
+    \optmin{p}{\left(p^\T G^\T Gp\right)}{p^\T p = 1}
+\end{equation}
+The \emph{Lagrangian} \footcite[][2]{ghojoghEigenvalueGeneralized2023} of this equation is
+\begin{equation}
+    \mathcal{L}(p, \lambda) = p^\T G^\T Gp - \lambda \left( p^\T p - 1 \right)
+\end{equation}
+where $\lambda \in \mathbb{R}$ is the \emph{Lagrange multiplier}. Since $p$ is minimized when $\mathcal{L}$ is minimized, we want to find the absolute minimum of $\mathcal{L}$. As such, we need to locate the critical points of $\mathcal{L}$. To find these points, we want to look for values of $p$ and $\lambda$ where all partial derivatives (denoted using $\partial$) of the Lagrangian are zero. Thus:
+\begin{gather}
+    \frac{\partial \mathcal{L}}{\partial p} \seteq 0 \nonumber\\
+    \Rightarrow \frac{\partial}{\partial p} \left[ p^\T G^\T Gp - \lambda \left( p^\T p - 1 \right) \right] = 0 \nonumber \\
+    \Rightarrow 2G^\T Gp - 2 \lambda p = 0 \nonumber \\
+    \Rightarrow G^\T Gp = \lambda p \label{eq:eigen}
+\end{gather}
+
+This equation is in fact in the form of the eigenvalue problem for $G^\T G$. Potential solutions for $p$ are eigenvectors that satisfy equation \ref{eq:eigen}, with the scalar $\lambda \in \mathbb{R}$ as the eigenvalue. Since this is a minimization problem, the minimized eigenvector $p$ is the one which has the smallest $\lambda$. \footcite[][2]{ghojoghEigenvalueGeneralized2023}

@@ -6,6 +6,9 @@
 % ENVIRONMENTS
 \newenvironment{system}{\left\lbrace\begin{array}{@{}l@{}}}{\end{array}\right.}
 
+\newtheorem{definition}{Definition}[section]
+\newtheorem{theorem}{Theorem}[section]
+
 % COMMANDS
 \newcommand{\scalemath}[2]{\scalebox{#1}{\mbox{\ensuremath{\displaystyle #2}}}}
 
@@ -23,4 +26,10 @@
 \newcommand{\Irrational}{\mathbb{I}}
 
 \newcommand{\dss}{\displaystyle}
+\newcommand{\eqrestriction}[1]{%
+\, , \; 
+\def\nextitem{\def\nextitem{;}}% Separator
+\renewcommand*\do[1]{\nextitem##1}% How to process each item
+\docsvlist{#1}% Process list
+}
 

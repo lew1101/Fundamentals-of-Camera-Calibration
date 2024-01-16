@@ -11,7 +11,7 @@ The construction of the pinhole camera model involves defining the relationships
     \item\textbf{World Coordinate Frame ($\boldsymbol{\mathcal{W}}$)}. Represents the 3D space of the scene being photographed, with respect to an origin which may be arbitrary and depends on the conventions chosen. Objects that are in the scene are defined with respect to this coordinate frame.
     \item\textbf{Camera Coordinate Frame ($\boldsymbol{\mathcal{C}}$)}. Represents the 3D space of the scene being photographed, but with respect to the pinhole (aperture) of the camera.
     \item\textbf{Image Coordinate Frame ($\boldsymbol{\Pi}$)}. 2D plane representing the image sensor plane of the camera. The origin is the principle point of the image sensor, where the optical axis intersects the image plane.
-    \item\textbf{Pixel Coordinate Frame}. 2D plane representing the position of pixels on the image sensor. The Discrete version of the image coordinate frame, where c
+    \item\textbf{Pixel Coordinate Frame}. 2D plane representing the position of pixels on the image sensor. The discrete version of the image coordinate frame, where c
 \end{itemize}
 
 The optical axis of a camera is an imaginary line which passes through the center of the aperture of the camera.
@@ -46,7 +46,7 @@ When a straight line is drawn from $\mathtt{X}$ to its projection $\mathtt{X_i}$
         \frac{y_i}{f} = \frac{y_c}{z_c} \quad \Longrightarrow \quad y_i = f \frac{y_c}{z_c} \label{subeq:yi_result}
     \end{gather}
 \end{subequations}
-Once the coordinates of the point projection, $(x_i, y_i)$, is known, we then need to convert it to actual pixel position of the point on the image, $(u, v)$. Pixel coordinates are measured in pixels, from the left-hand corner of the image. This is the convention that is typically followed in computer graphics. As such, there will be an offset in pixels, $(c_x, c_y)$, which represents the optical center of the image (i.e. the point at which the optical axis intersects the image plane). Additionally, the relationship between $(x_i, y_i)$ and $(u, v)$ is proportional, but they scale at different rates, as $(x_i, y_i)$ can be measured using any unit measurement, and can have negative and decimal values. On the other hand, $(u,v)$ are measured in discrete pixel value, which can different sizes depending on the camera used. As such, we define scaling factors, $m_x$ and $m_y$, be scaling factors which represent the pixel density of the image sensor in the $x$ and $y$ axes of the image sensor plane respectively.
+Once the coordinates of the point projection, $(x_i, y_i)$, is known, we then need to convert it to actual pixel position of the point on the image, $(u, v)$. Pixel coordinates are measured in pixels, from the left-hand corner of the image. This is the convention that is typically followed in computer graphics. As such, there will be an offset in pixels, $(c_x, c_y)$, which represents the optical center of the image (i.e. the point at which the optical axis intersects the image plane). Additionally, the relationship between $(x_i, y_i)$ and $(u, v)$ is proportional, but they scale at different rates, as $(x_i, y_i)$ can be measured using any unit measurement, and can have negative and decimal values. On the other hand, $(u,v)$ are measured in discrete pixel value, which can be different sizes depending on the camera used. As such, we define scaling factors, $m_x$ and $m_y$, which represent the pixel density of the image sensor in the $x$ and $y$ axes of the image sensor plane respectively.
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{diagrams/sensor_grid}
@@ -74,16 +74,18 @@ Multiply both sides of the equations by $z_c$.
         z_c v = f_y y_c + z_c c_y
     \end{gather*}
 \end{subequations}
-Doing so allows us to express the relationship as a matrix transformation using homogenous coordinates, by letting $\widetilde{w} = z_c$.
+Doing so allows us to express the relationship as a matrix transformation using \textbf{homogenous coordinates}\footnote{See Appendix \ref{sec:homogenous}.}, by letting $\widetilde{w} = z_c$.
 \begin{equation}
     \begin{bmatrix}
         z_c u \\ z_c v \\ z_c
     \end{bmatrix}
     =
+    a
     \begin{bmatrix}
         f_x x_c + z_c c_x \\ f_y y_c + z_c c_y \\ z_c
     \end{bmatrix}
     =
+    a
     \underbrace{
         \begin{bmatrix}
             f_x & 0   & c_x \\
@@ -94,12 +96,13 @@ Doing so allows us to express the relationship as a matrix transformation using 
     \begin{bmatrix}
         x_c \\ y_c \\ z_c
     \end{bmatrix}
+    \eqrestriction{a \in \Real, a \neq 0}
 \end{equation}
 This can be represented simply with:
 \begin{gather}
-    \widetilde{p}_i = mK\, p_c\,, \qquad m \in \Real^+ \label{eq:pi}
+    \widetilde{p}_i = aK\, p_c \label{eq:pi} \eqrestriction{a \in \Real, a \neq 0}
 \end{gather}
-In this case, $K$ is what is known as the \emph{calibration matrix}. It is a matrix transformation which maps a point represented in the camera coordinate frame to the coordinates of their projection onto the sensor plane.
+In this case, $K$ is what is known as the \textbf{calibration matrix}. It is a matrix transformation which maps a point represented in the camera coordinate frame to the coordinates of their projection onto the sensor plane.
 
 \subsection{Extrinsic Parameters} \label{sec:extrinsics}
 
@@ -120,7 +123,7 @@ There are two possible types of movement affecting the orientation of the camera
     \item Row 2: Unit vector representing $\hat{y}_c$ after rotation.
     \item Row 3: Unit vector representing $\hat{z}_c$ after rotation.
 \end{itemize}
-$R$ is an orthonormal matrix, because the row and column vectors of $R$ have to be orthogonal. Orthonormality is important because it ensures that the scale of vectors do not change (meaning that determinant of $R$ has to be 1) and that the orthogonality between vectors are maintained. 
+$R$ is an orthonormal matrix, because the row and column vectors of $R$ have to be orthogonal. Orthonormality is important because it ensures that the scale of vectors do not change (meaning that determinant of $R$ has to be 1) and that the orthogonality between vectors are maintained.
 
 \begin{figure}[H]
     \centering
@@ -129,12 +132,12 @@ $R$ is an orthonormal matrix, because the row and column vectors of $R$ have to 
     \label{fig:ext}
 \end{figure}
 
-From Figure \ref{fig:ext}, we can see that the naive approach to finding the position vector of the point in $\mathcal{C}$ $p_c$ is equal to the position vector of the point in $\mathcal{W}$ $p_w$ minus the position vector of the camera $c_w$. However, the camera can be facing in other directions, and we account for this rotation by including a rotational matrix in the equation. Thus: 
+From Figure \ref{fig:ext}, we can see that the naive approach to finding the position vector of the point in $\mathcal{C}$  is equal to the position vector of the point in $\mathcal{W}$ minus the position vector of the camera $c_w$. However, the camera can be facing in other directions, and we account for this rotation by including a rotational matrix in the equation. Thus:
 \begin{align}
-    p_c & = R\,(p_w-c_w) \nonumber        \\
-        & = R\,p_w -R\,c_w 
+    p_c & = R\,(p_w-c_w) \nonumber \\
+        & = R\,p_w -R\,c_w
 \end{align}
-Since the position of the camera $c_w$ is constant, we can replace the constant vector $-R\,c_w$ with $t$, and in this case $t$ represents the translation of the camera from the origin. 
+Since the position of the camera $c_w$ is constant, we let $t = -R\,c_w$, and $t$ represents the translation of the camera from the origin.
 \begin{equation}
     p_c = R\,p_w + t
 \end{equation}
@@ -165,10 +168,10 @@ We can then combine $R$ and $t$ into an augmented matrix, $[R\,|\,t\,]$, by expr
     =
     \underbrace{
         \begin{bmatrix}
-        r_{11} & r_{12} & r_{13} & t_x \\
-        r_{21} & r_{22} & r_{23} & t_y \\
-        r_{31} & r_{32} & r_{33} & t_z \\
-    \end{bmatrix}
+            r_{11} & r_{12} & r_{13} & t_x \\
+            r_{21} & r_{22} & r_{23} & t_y \\
+            r_{31} & r_{32} & r_{33} & t_z \\
+        \end{bmatrix}
     }_{\mathlarger{[R\,|\,t\,]}}
     \begin{bmatrix}
         x_w \\ y_w \\ z_w \\ 1
@@ -176,6 +179,6 @@ We can then combine $R$ and $t$ into an augmented matrix, $[R\,|\,t\,]$, by expr
 \end{equation}
 Thus, we arrive at the final equation:
 \begin{equation}
-    p_c=[R\,|\,t\,]\,\widetilde{p}_w \label{eq:pc}
+    p_c=[R\,|\,t\,] \,\widetilde{p}_w \label{eq:pc}
 \end{equation}
 
