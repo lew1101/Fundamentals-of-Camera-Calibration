@@ -1,9 +1,6 @@
 \section{Approach} 
 
-There are many techniques one could take to calibrate a camera, 
-
-
-
+There are a multitude of approaches one could take to calibrate cameras, and the choice of strategy significantly influences the complexity of the mathematical techniques that are used. The diversity in these approaches stems from the inherent complexity of cameras and the need for adaptable methods to address specific goals and constraints of each application. Notably, the accuracy of the calibration is significantly influenced by how the camera model is constructed, as well as the type of calibration used \footcite{weisunRequirementsCamera2005}.
 
 \subsection{Camera Model} \label{sec:camera_model}
 
@@ -39,17 +36,14 @@ If necessary, one could reintroduce distortion and shear terms in order to minim
 
 \subsection{Calibration Object}
 
-The calibration object is an object with known dimensions and features which is often used in camera calibration to 
-
-
-Calibration objects can be constructed in many ways, and they can be separated into different categories based the dimension of the calibration object \footcite{zhangCameraCalibration2007}.
+The calibration object is an object with known dimensions and features which is often employed in camera calibration to establish a mapping between the 3D world and 2D image space. By capturing images of the calibration object, one can establish correspondences between points in the scene and pixels in the images, which can then be used to deduce the camera's intrinsic and extrinsic parameters. Calibration objects can be constructed in many ways, and they can be separated into different categories based the dimension of the calibration object \footcite{zhangCameraCalibration2007}. 
 
 \begin{itemize}[leftmargin=!, itemindent=-4ex]
-    \item \textbf{3D object based calibration} -- Performed by using a calibration object whose geometry is known to very high precision. Typically, the calibration object consists of 2 or 3 orthogonal planes, although a plane whose precise translation is known may also be used, which also yields 3D reference points \footcite{zhangCameraCalibration2007}. Using 3D objects is typically preferred, as it yields the highest accuracy \footcite{zhangCameraCalibration2007}, and the mathematics required is also the least. 
+    \item \textbf{3D object based calibration} -- Performed by using a calibration object whose geometry is known to very high precision. Typically, the calibration object consists of 2 or 3 orthogonal planes, although a plane whose precise translation is known may also be used, which also yields 3D reference points \footcite{zhangCameraCalibration2007}. Using 3D objects is typically preferred, as it yields the highest accuracy \footcite{zhangCameraCalibration2007}, and the mathematics required is the simplest.
     \item \textbf{2D plane-based calibration} -- The most common technique is known as Zhang's method, and it requires a planar object (often a checkerboard pattern), and various pictures of this plane are taken at different orientations \footcite{zhangFlexibleNew2000}. Knowledge of the translation of the plane is not necessary. Due to its easier setup and good accuracy, it is the best choice in most situations. In fact, the most commonly used camera vision programming library, \texttt{OpenCV}, is geared towards this type of calibration. 
     \item \textbf{1D line-based calibration} -- Typically requires analyzing more than three photographs with straight lines which are not parallel with each other \footcite{chuLineBasedCamera2005}. 
 \end{itemize}
 
 One can also calibrate cameras without a calibration object, using featuring tracking of objects in the scene to estimate camera parameters. This process is often referred to as self-calibration or auto-calibration. However, this is less preferable, as it involves a lot of estimation of parameters, which not only means that it is a more mathematically complex problem, it may not be able to achieve the accuracy of calibration using known calibration patterns \footcite{zhangCameraCalibration2007}. As such, it is typically the only chosen when pre-calibration is impossible. 
 
-For this paper, I will focus on calibration using a 3D calibration object, because the mathematics behind it is simpler, and many of the techniques used in 3D-based calibration are 
+For this paper, I will focus on calibration using a 3D calibration object, because the mathematics behind it is simpler, and the techniques used in 3D-based calibration are well-established. By concentrating on 3D-based calibration, this paper aims to leverage the simplicity and reliability of established mathematical methods, contributing to a better understanding behind the mathematical techniques and strategies employed in camera calibration.

@@ -1,8 +1,6 @@
-\section{Extracting Parameters}
+\section{Extracting Parameters} \label{sec:extract}
 
-Once we have solved for the projection for the projection matrix $P$, we can then extract the intrinsic and extrinsic parameters. We know that
-
-An important property worth noting is that $K$ is an \emph{upper triangular matrix}. It is a special kind of square matrix with all of its non-zero entries above the main diagonal. This is an important property which we will exploit when extracting the $K$ from the projection matrix in section \ref{sec:projection}.
+Once we have solved for the projection for the projection matrix $P$, we can then decompose it and extract the intrinsic and extrinsic parameters. 
 
 \begin{align}
     P & = K\,[\,R\;|\;t\,]       \nonumber \\
@@ -10,7 +8,9 @@ An important property worth noting is that $K$ is an \emph{upper triangular matr
       & = [\,KR\;|\;-KRc_w\,]              \\
 \end{align}
 
-\subsection{RQ Decomposition}
+
+
+\subsection{RQ Decomposition} \label{subsec:rq}
 
 \begin{equation*}
     Q =

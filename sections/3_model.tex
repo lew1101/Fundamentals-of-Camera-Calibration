@@ -1,33 +1,39 @@
 \section{Constructing the Pinhole Camera Model}
 
+At its core, the pinhole camera model is a mathematical model which describes how points in 3D space are projected onto a 2D plane. It defines the relationship between the 3D world, the pinhole camera, and the resulting 2D image. 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{diagrams/imaging_model}
     \caption{Pinhole camera model.}
 \end{figure}
 
-The construction of the pinhole camera model involves defining the relationships between the 3D world, the pinhole camera, and the resulting 2D image. To reflect these  4 different frames of reference, all of which :
+\subsection{Nomenclature}
 \begin{itemize}[leftmargin=!, itemindent=-4ex]
-    \item\textbf{World Coordinate Frame ($\boldsymbol{\mathcal{W}}$)}. Represents the 3D space of the scene being photographed, with respect to an origin which may be arbitrary and depends on the conventions chosen. Objects that are in the scene are defined with respect to this coordinate frame.
-    \item\textbf{Camera Coordinate Frame ($\boldsymbol{\mathcal{C}}$)}. Represents the 3D space of the scene being photographed, but with respect to the pinhole (aperture) of the camera.
-    \item\textbf{Image Coordinate Frame ($\boldsymbol{\Pi}$)}. 2D plane representing the image sensor plane of the camera. The origin is the principle point of the image sensor, where the optical axis intersects the image plane.
-    \item\textbf{Pixel Coordinate Frame}. 2D plane representing the position of pixels on the image sensor. The discrete version of the image coordinate frame, where c
+    \item $\boldsymbol{f}$ -- the focal length of the camera.
+    \item $\boldsymbol{p_w}$ -- the position vector of the point $\mathtt{X}$ in $\mathcal{W}$.
+    \item $\boldsymbol{p_c}$ -- the position vector of the point $\mathtt{X}$ in $\mathcal{C}$.
+    \item $\boldsymbol{p_i}$ -- the position vector of the projection $\mathtt{X_i}$ on the image plane relative to the principal point, which is where the optical axis intersects the image plane.
+    \item $\boldsymbol{c_w}$ -- the position vector of the pinhole in $\mathcal{W}$.
 \end{itemize}
 
-The optical axis of a camera is an imaginary line which passes through the center of the aperture of the camera.
-
-
+\subsection{Coordinate Frames}
+To construct the pinhole camera model, we will need to define 4 different coordinate systems: 
+\begin{itemize}[leftmargin=!, itemindent=-4ex]
+    \item\textbf{World Coordinate Frame ($\boldsymbol{\mathcal{W}}$)} -- Represents the 3D space of the scene being photographed, with respect to an origin which may be arbitrary and depends on the conventions chosen. Objects that are in the scene are defined with respect to this coordinate frame.
+    \item\textbf{Camera Coordinate Frame ($\boldsymbol{\mathcal{C}}$)} -- Represents the 3D space of the scene with the pinhole (aperture) of the camera defined as the origin.
+    \item\textbf{Image Coordinate Frame ($\boldsymbol{\Pi}$)} -- 2D plane representing the image sensor plane of the camera. The origin is the principle point of the image sensor, where the optical axis intersects the image plane.
+    \item\textbf{Pixel Coordinate Frame} -- 2D plane representing the position of pixels on the image sensor. It is the discrete version of the image coordinate frame. The unit of measure is pixels.
+\end{itemize}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{diagrams/coord_conversions}
-    \caption{Coordinate transformations.}
+    \caption{This workflow highlights the coordinate transformations that need to occur to project a point in the scene onto the image plane.}
 \end{figure}
-
 
 \subsection{Intrinsic Parameters} \label{sec:intrinsics}
 
-Intrinsic parameters describe the internal characteristics of the camera. In other words, it dictates how in the 3D space are projected onto the image plane, i.e. the relationship between the position of the point $\mathtt{X}$ to its projection on the image plane.
+Intrinsic parameters describe the internal characteristics of the camera. In other words, it dictates how in the 3D space are projected onto the image plane, i.e. the relationship between the position of $\mathtt{X}$ to its projection on the image plane.
 
 \begin{figure}[H]
     \centering
@@ -75,7 +81,7 @@ Multiply both sides of the equations by $z_c$.
     \end{gather*}
 \end{subequations}
 Doing so allows us to express the relationship as a matrix transformation using \textbf{homogenous coordinates}\footnote{See Appendix \ref{sec:homogenous}.}, by letting $\widetilde{w} = z_c$.
-\begin{equation}
+\begin{equation} \label{eq:cali}
     \begin{bmatrix}
         z_c u \\ z_c v \\ z_c
     \end{bmatrix}
@@ -98,11 +104,14 @@ Doing so allows us to express the relationship as a matrix transformation using 
     \end{bmatrix}
     \eqrestriction{a \in \Real, a \neq 0}
 \end{equation}
-This can be represented simply with:
+
+The equation includes a non-zero scale factor $a$ because a property of homogenous coordinates is that multiplying the homogenous coordinate of a point by a non-zero scalar still represents the same point. 
+
+Equation \ref{eq:cali} can be represented more simply thus:
 \begin{gather}
     \widetilde{p}_i = aK\, p_c \label{eq:pi} \eqrestriction{a \in \Real, a \neq 0}
 \end{gather}
-In this case, $K$ is what is known as the \textbf{calibration matrix}. It is a matrix transformation which maps a point represented in the camera coordinate frame to the coordinates of their projection onto the sensor plane.
+$K$ is known as the \textbf{calibration matrix}. It is a matrix transformation which maps a point represented in the camera coordinate frame to the coordinates of their projection onto the sensor plane. An important property worth noting is that $K$ is an \emph{upper triangular matrix}. It is a special kind of square matrix where all of its non-zero entries are above the main diagonal. This is an important property which we will exploit when extracting the $K$ from the projection matrix in section \ref{subsec:rq}.
 
 \subsection{Extrinsic Parameters} \label{sec:extrinsics}
 
@@ -123,6 +132,7 @@ There are two possible types of movement affecting the orientation of the camera
     \item Row 2: Unit vector representing $\hat{y}_c$ after rotation.
     \item Row 3: Unit vector representing $\hat{z}_c$ after rotation.
 \end{itemize}
+
 $R$ is an orthonormal matrix, because the row and column vectors of $R$ have to be orthogonal. Orthonormality is important because it ensures that the scale of vectors do not change (meaning that determinant of $R$ has to be 1) and that the orthogonality between vectors are maintained.
 
 \begin{figure}[H]

@@ -56,7 +56,7 @@ The implications of this equation is very important, as it means that a $3 \time
 
 \subsection{Solving for the Projection Matrix}
 
-Now, we need to devise a way to solve for the projection matrix. Since we know that the projection matrix describes relationship between a point and their projection, we can go backwards and solve for the projection matrix given a set of points and their corresponding projections. Rewriting the matrix equation \ref{eq:project} as a set of parametric equations and letting $a=1$ for now, we obtain:
+Now, we need to devise a way to solve for the projection matrix. Since we know that the projection matrix describes relationship between a point and their projection, we can go backwards and solve for the projection matrix given a set of points and their corresponding image projections. Rewriting the matrix equation \ref{eq:project} as a set of parametric equations and letting $a=1$ for now, we obtain:
 \begin{align*}
     \widetilde{u}_n = p_{11}x_w^{(n)} + p_{12}y_w^{(n)} + p_{13}z_w^{(n)} + p_{14} \\
     \widetilde{v}_n = p_{21}x_w^{(n)} + p_{22}y_w^{(n)} + p_{23}z_w^{(n)} + p_{24} \\
@@ -79,7 +79,9 @@ Bringing all the terms onto one side:
         0 = p_{21}x_w^{(n)} + p_{22}y_w^{(n)} + p_{23}z_w^{(n)} + p_{24} - p_{31}v_nx_w^{(n)} - p_{32}v_ny_w^{(n)} - p_{33}v_nz_w^{(n)} - p_{34}v_n
     \end{align}
 \end{subequations}
-We then need to recognize the fact that this 
+
+
+We then need to recognize the fact that these two equations can be joined together to form one matrix equation:
 
 \setcounter{MaxMatrixCols}{20}
 \begin{equation}
@@ -107,7 +109,7 @@ We then need to recognize the fact that this
 where $G$ is a $2n \times 12$ matrix, $n \in \Integer^+$, and $p$ is the matrix vectorization of $P$. This system has 12 degrees of freedom, and since each point yields two equations, a minimum of 6 sets of points and their corresponding image projections are necessary in order to solve the system. When using 6 correspondences, a unique solution can be obtained using classical approaches, such as using 
 \textbf{Gaussian elimination}. But since we want to minimize uncertainty and achieve a solution which is as accurate as possible, we want to use as many correspondences as possible. 
 
-When using more the 6 correspondences, we have more equations than unknowns. Such systems are \emph{overdetermined}, and generally have no solutions \footcite{williamsOverdeterminedSystems1990}. However, we can optimize to obtain the "best approximate solution" using a method such as the \hyperref[sec:clss]{\textbf{least-squares method}}. 
+When using more the 6 correspondences, we have more equations than unknowns. Such systems are \emph{overdetermined}, and generally have no solutions \footcite{williamsOverdeterminedSystems1990}. However, we can optimize the system and obtain the "best approximate solution" using a method such as the \hyperref[sec:clss]{\textbf{least-squares method}}. 
 
 \subsection{Constrained Least-Squares Solution} \label{sec:clss}
 
@@ -140,20 +142,20 @@ However, we need to further constrain the problem since the projection matrix $P
 \begin{equation*} \label{eq:min1}
     \optmin{p}{\lVert Gp \rVert^2}{\lVert p \rVert^2 = 1}
 \end{equation*}
-Equivalently:
+Or equivalently:
 \begin{equation} \label{eq:min2}
     \optmin{p}{\left(p^\T G^\T Gp\right)}{p^\T p = 1}
 \end{equation}
-The \emph{Lagrangian} \footcite[][2]{ghojoghEigenvalueGeneralized2023} of this equation is
+The \emph{Lagrangian} \footcite[][2]{ghojoghEigenvalueGeneralized2023} of this equation is:
 \begin{equation}
     \mathcal{L}(p, \lambda) = p^\T G^\T Gp - \lambda \left( p^\T p - 1 \right)
 \end{equation}
-where $\lambda \in \mathbb{R}$ is the \emph{Lagrange multiplier}. Since $p$ is minimized when $\mathcal{L}$ is minimized, we want to find the absolute minimum of $\mathcal{L}$. As such, we need to locate the critical points of $\mathcal{L}$. To find these points, we want to look for values of $p$ and $\lambda$ where all partial derivatives (denoted using $\partial$) of the Lagrangian are zero. Thus:
+where $\lambda \in \mathbb{R}$ is the \emph{Lagrange multiplier}. Since $p$ is minimized when $\mathcal{L}$ is minimized, we want to find the absolute minimum of $\mathcal{L}$. As such, we need to locate the critical points of $\mathcal{L}$. To find these points, we want to look for values of $p$ and $\lambda$ where all partial derivatives (denoted using $\partial$) of the Lagrangian are zero.
 \begin{gather}
-    \frac{\partial \mathcal{L}}{\partial p} \seteq 0 \nonumber\\
+    \frac{\partial}{\partial p}\mathcal{L}(p, \lambda) \seteq 0 \nonumber\\
     \Rightarrow \frac{\partial}{\partial p} \left[ p^\T G^\T Gp - \lambda \left( p^\T p - 1 \right) \right] = 0 \nonumber \\
     \Rightarrow 2G^\T Gp - 2 \lambda p = 0 \nonumber \\
     \Rightarrow G^\T Gp = \lambda p \label{eq:eigen}
 \end{gather}
 
-This equation is in fact in the form of the eigenvalue problem for $G^\T G$. Potential solutions for $p$ are eigenvectors that satisfy equation \ref{eq:eigen}, with the scalar $\lambda \in \mathbb{R}$ as the eigenvalue. Since this is a minimization problem, the minimized eigenvector $p$ is the one which has the smallest $\lambda$. \footcite[][2]{ghojoghEigenvalueGeneralized2023}
+This equation is in fact in the form of the eigenvalue problem for $G^\T G$. Potential solutions for $p$ are eigenvectors that satisfy equation \ref{eq:eigen}, with the scalar $\lambda \in \mathbb{R}$ as the eigenvalue. Since this is a minimization problem, the best approximate solution to $p$ is the one which has the smallest $\lambda$. \footcite[][2]{ghojoghEigenvalueGeneralized2023}
