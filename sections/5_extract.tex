@@ -1,19 +1,14 @@
 \section{Extracting Parameters} \label{sec:extract}
 
-Once we have solved for the projection for the projection matrix $P$, we can then decompose it and extract the intrinsic and extrinsic parameters. 
-
-\begin{align}
-    P & = K\,[\,R\;|\;t\,]       \nonumber \\
-      & = K\,[\,R\;|\;-Rc_w\,]   \nonumber \\
-      & = [\,KR\;|\;-KRc_w\,]              \\
+Once we have solved for the projection for the projection matrix $P$, we can then decompose it and extract the intrinsic and extrinsic parameters. Recall that $P = K\,[\,R\;|\;t\,]$. Distributing $K$ into $[\,R\;|\;t\,]$ yields:
+\begin{align} \label{eq:param}
+    P & = [\,KR\;|\;Kt\,]     \nonumber                     \\
+      & = [\,KR\;|\;-KRc_w\,]  \nonumber                    \\
+      & = [\,Q\;|\;-Qc_w\,]      \qquad \text{with } Q = KR
 \end{align}
-
-
-
-\subsection{RQ Decomposition} \label{subsec:rq}
-
+Analyzing the above equation reveals that $Q$ corresponds to the first three columns of the projection matrix. i.e.
 \begin{equation*}
-    Q =
+    Q \equiv
     \begin{bmatrix}
         p_{11} & p_{12} & p_{13} \\
         p_{21} & p_{22} & p_{23} \\
@@ -36,36 +31,30 @@ Once we have solved for the projection for the projection matrix $P$, we can the
     }_{\mathlarger{R}}
 \end{equation*}
 
-Since $K$ is in the form of an \emph{upper right triangular matrix} and $R$ is an \emph{orthonormal matrix}, we can find unique solutions for $K$ and $R$ using a method called \emph{RQ decomposition}.
+\subsection{RQ Decomposition} \label{subsec:rq}
+Since $K$ is in the form of an \emph{upper right triangular matrix} and $R$ is an \emph{orthonormal matrix}, it is possible to decompose $P$ and find unique solutions for $K$ and $R$ using a method called \textbf{RQ decomposition}. There are various algorithms that exist to do so, such as the \emph{Graham-Schmidt Process} and the \emph{Householder transformation} method, however, the minute details of how they work fall beyond the scope of this paper. Instead, we use \texttt{SciPy}, a \emph{Python} library, to perform the decomposition.
 
+\subsection{Extracting the Camera Position}
 
-
-\emph{RQ decomposition} is a technique which allows us to uniquely decompose a matrix $A$ into a product $A=RQ$, where $R$ is an upper
-
-Since
-
-\subsection{Extracting the Translation Vector}
-
+From equation \ref{eq:param}, we see that $-Qc_w$ is equal to the last column of $P$.
 \begin{gather}
-    -Qc_w =
     \begin{bmatrix}
         p_{14} \\ p_{24} \\ p_{34}
-    \end{bmatrix} \nonumber \\
-    \Rightarrow c_w = -Q^{-1}
+    \end{bmatrix} = -Ac_w   \nonumber \\
+    \Rightarrow \boxed{c_w = -Q^{-1}
     \begin{bmatrix}
         p_{14} \\ p_{24} \\ p_{34}
-    \end{bmatrix}
+    \end{bmatrix}}
 \end{gather}
-
-
-
+where $Q^{-1}$ denotes the inverse of $Q$.
 
 \subsection{Extracting Orientation as Angles}
 
-When constructing the extrinsic matrix in section \ref{sec:extrinsics}, we defined the rotation of the camera as a $3 \times 3$ matrix, where the
-
-We can represent the rotation in terms of \emph{Tait-Bryan Angles}, where the rotation is represented as 3 elemental rotations about each of the principle axes.
-
+When constructing the extrinsic matrix in section \ref{sec:extrinsics}, we defined the rotation of the camera as a $3 \times 3$ matrix, where the rows represented the unit vectors $\hat{x}_c$, $\hat{y}_c$, and $\hat{z}_c$ after the rotation is performed. However, it is easier to interpret the rotations in terms of angles because angles provide a more intuitive and human-understandable representation of orientation. Specifically, we can employ \textbf{Tait-Bryan angles}, where the rotation is decomposed into three sequential rotations about each of the principle axes. These angles offer a straightforward way to understand how an object is rotated in terms of pitch, yaw, and roll. We employ \emph{x-y-z} Tait-Bryan angles, a variant where the $x$ rotation is performed first, then the $y$ rotation, and finally the $z$ rotation. This can be mathematically represented thus:
+\begin{equation}
+    R \equiv R_z(\gamma)R_y(\beta)R_x(\alpha)
+\end{equation}
+where:
 \begin{subequations}
     \begin{gather}
         R_x(\alpha) =
@@ -88,65 +77,28 @@ We can represent the rotation in terms of \emph{Tait-Bryan Angles}, where the ro
         \end{bmatrix}
     \end{gather}
 \end{subequations}
-
-
-\begin{equation}
-    R \equiv R_z(\gamma)R_y(\beta)R_x(\alpha)
-\end{equation}
-
-\begin{align}
-    R & =
-    \begin{bmatrix}
-        0 & \cos(\alpha) & -\sin(\alpha) \\
-        0 & \sin(\alpha) & \cos(\alpha)  \\
-        1 & 0            & 0             \\
-    \end{bmatrix}
-    \begin{bmatrix}
-        \cos(\beta)  & 0 & -\sin(\beta) \\
-        0            & 1 & 0            \\
-        -\sin(\beta) & 0 & -\cos(\beta)
-    \end{bmatrix}
-    \begin{bmatrix}
-        \cos(\gamma) & -\sin(\gamma) & 0 \\
-        \sin(\gamma) & \cos(\gamma)  & 0 \\
-        0            & 0             & 1
-    \end{bmatrix} \nonumber \\
-      & =
-    \scalemath{0.85}{
+We can then multiply the matrices together to obtain a single $3 \times 3$ matrix:
+\begin{equation} \label{eq:rot}
+    R = \scalemath{0.85}{
         \begin{bmatrix}
             \cos(\beta)\,\cos(\gamma) & \sin(\alpha)\,\sin(\beta)\,\cos(\gamma) - \cos(\alpha)\,\sin(\gamma) & \cos(\alpha)\,\sin(\beta)\,\cos(\gamma) + \sin(\alpha)\,\cos(\gamma) \\
             \cos(\beta)\,\sin(\gamma) & \sin(\alpha)\,\sin(\beta)\,\sin(\gamma) + \cos(\alpha)\,\cos(\gamma) & \cos(\alpha)\,\sin(\beta)\,\sin(\gamma) - \sin(\alpha)\,\cos(\gamma) \\
             -\sin(\beta)              & \sin(\alpha)\,\cos(\beta)                                            & \cos(\alpha)\,\cos(\beta)
         \end{bmatrix}
     }
-\end{align}
-
-We have that
-\begin{equation*}
-    r_{31} = -\sin(\beta) \nonumber
-\end{equation*}
-\begin{equation}
-    \Rightarrow \beta = \sin^{-1}(-r_{31})
 \end{equation}
-
-\begin{equation*}
-    r_{32} = \sin(\alpha)\cos(\beta)
-\end{equation*}
-\begin{align}
-    \begin{split}
-        \Rightarrow \alpha & = \sin^{-1}\left(\frac{r_{32}}{\cos(\beta)}\right)               = \sin^{-1}\left(\frac{r_{32}}{\cos(\sin^{-1}(-r_{31}))}\right) \\
-        & = \sin^{-1}\left(\frac{r_{32}}{\sqrt{1-r_{31}^2}}\right)
-    \end{split}
-\end{align}
-
-\begin{equation*}
-    r_{21} = \cos(\beta)\sin(\gamma)
-\end{equation*}
-\begin{align}
-    \begin{split}
-        \Rightarrow \gamma & = \sin^{-1}\left(\frac{r_{21}}{\cos(\beta)}\right)               = \sin^{-1}\left(\frac{r_{21}}{\cos(\sin^{-1}(-r_{31}))}\right) \\
-        & = \sin^{-1}\left(\frac{r_{21}}{\sqrt{1-r_{31}^2}}\right)
-    \end{split}
-\end{align}
-
-
+Since we have already determined for the parameters of the rotation matrix, we can solve for the angles $\alpha$, $\beta$, and $\gamma$ by deriving formulas for them using equation \ref{eq:rot}:
+\begin{gather}
+    r_{31} = -\sin(\beta) \nonumber \\
+    \Rightarrow \boxed{\beta = \sin^{-1}(-r_{31})}
+\end{gather}
+\begin{gather}
+    r_{32} = \sin(\alpha)\cos(\beta) \nonumber \\
+    \Rightarrow \sin(\alpha)  = \frac{r_{32}}{\cos(\beta)} = \frac{r_{32}}{\cos(\sin^{-1}(-r_{31}))} \nonumber \\
+    \Rightarrow \boxed{\alpha = \sin^{-1}\left(\frac{r_{32}}{\sqrt{1-r_{31}^2}}\right)}
+\end{gather}
+\begin{gather}
+    r_{21} = \cos(\beta)\sin(\gamma) \nonumber                                                                 \\
+    \Rightarrow \sin(\gamma)  =\frac{r_{21}}{\cos(\beta)}  = \frac{r_{21}}{\cos(\sin^{-1}(-r_{31}))} \nonumber \\
+    \Rightarrow \boxed{\gamma= \sin^{-1}\left(\frac{r_{21}}{\sqrt{1-r_{31}^2}}\right)}
+\end{gather}

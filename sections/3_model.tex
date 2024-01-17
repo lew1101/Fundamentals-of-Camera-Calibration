@@ -1,6 +1,6 @@
 \section{Constructing the Pinhole Camera Model}
 
-At its core, the pinhole camera model is a mathematical model which describes how points in 3D space are projected onto a 2D plane. It defines the relationship between the 3D world, the pinhole camera, and the resulting 2D image. 
+At its core, the pinhole camera model is a mathematical model which describes how points in 3D space are projected onto a 2D plane. It defines the relationship between the 3D world, the pinhole camera, and the resulting 2D image.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{diagrams/imaging_model}
@@ -17,7 +17,7 @@ At its core, the pinhole camera model is a mathematical model which describes ho
 \end{itemize}
 
 \subsection{Coordinate Frames}
-To construct the pinhole camera model, we will need to define 4 different coordinate systems: 
+To construct the pinhole camera model, we will need to define 4 different coordinate systems:
 \begin{itemize}[leftmargin=!, itemindent=-4ex]
     \item\textbf{World Coordinate Frame ($\boldsymbol{\mathcal{W}}$)} -- Represents the 3D space of the scene being photographed, with respect to an origin which may be arbitrary and depends on the conventions chosen. Objects that are in the scene are defined with respect to this coordinate frame.
     \item\textbf{Camera Coordinate Frame ($\boldsymbol{\mathcal{C}}$)} -- Represents the 3D space of the scene with the pinhole (aperture) of the camera defined as the origin.
@@ -52,7 +52,7 @@ When a straight line is drawn from $\mathtt{X}$ to its projection $\mathtt{X_i}$
         \frac{y_i}{f} = \frac{y_c}{z_c} \quad \Longrightarrow \quad y_i = f \frac{y_c}{z_c} \label{subeq:yi_result}
     \end{gather}
 \end{subequations}
-Once the coordinates of the point projection, $(x_i, y_i)$, is known, we then need to convert it to actual pixel position of the point on the image, $(u, v)$. Pixel coordinates are measured in pixels, from the left-hand corner of the image. This is the convention that is typically followed in computer graphics. As such, there will be an offset in pixels, $(c_x, c_y)$, which represents the optical center of the image (i.e. the point at which the optical axis intersects the image plane). Additionally, the relationship between $(x_i, y_i)$ and $(u, v)$ is proportional, but they scale at different rates, as $(x_i, y_i)$ can be measured using any unit measurement, and can have negative and decimal values. On the other hand, $(u,v)$ are measured in discrete pixel value, which can be different sizes depending on the camera used. As such, we define scaling factors, $m_x$ and $m_y$, which represent the pixel density of the image sensor in the $x$ and $y$ axes of the image sensor plane respectively.
+Then, we need to convert the coordinates of the image projection $[x_i, y_i]^\T$ to actual pixel position of the point on the image $[u, v]^\T$. Pixel coordinates are measured in pixels, from the left-hand corner of the image. This is the convention that is typically followed in computer graphics. As such, there will be an offset in pixels, $c_x$ and $c_y$, which represents the optical center of the image (i.e. the point at which the optical axis intersects the image plane). The relationship between $[x_i, y_i]^\T$ and $[u, v]^\T$ is proportional, but they scale at different rates, as $[x_i, y_i]^\T$ can be measured using any unit measurement, and can have negative and decimal values. On the other hand, $[u,v]^\T$ are measured in discrete pixel values, and since pixels are different sizes depending on the camera used, we define scaling factors, $m_x$ and $m_y$, which represent the pixel density of the image sensor in the $x$ and $y$ axes of the image sensor plane respectively.
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{diagrams/sensor_grid}
@@ -69,10 +69,12 @@ where $u, v \in \Integer^+_{\,*}$. Replacing $x_i$ and $y_i$ for the result we o
     v = m_y f \frac{y_c}{z_c} + c_y
 \end{align*}
 This gives us a direct relationship between camera coordinates and their corresponding pixel coordinates. Since $m_x$, $m_y$, and $f$ are all unknowns, we can combine the products $m_x f$ and $m_y f$ into to $f_x$ and $f_y$ respectively. Under this new scheme, we define $f_x$ and $f_y$ as the horizontal and vertical focal lengths of camera.
-\begin{gather}
-    u = f_x \frac{x_c}{z_c} + c_x \\
-    v = f_y \frac{y_c}{z_c} + c_y
-\end{gather}
+\begin{subequations}
+    \begin{gather*}
+        u = f_x \frac{x_c}{z_c} + c_x \\
+        v = f_y \frac{y_c}{z_c} + c_y
+    \end{gather*}
+\end{subequations}
 Multiply both sides of the equations by $z_c$.
 \begin{subequations}
     \begin{gather*}
@@ -80,7 +82,7 @@ Multiply both sides of the equations by $z_c$.
         z_c v = f_y y_c + z_c c_y
     \end{gather*}
 \end{subequations}
-Doing so allows us to express the relationship as a matrix transformation using \textbf{homogenous coordinates}\footnote{See Appendix \ref{sec:homogenous}.}, by letting $\widetilde{w} = z_c$.
+Doing so allows us to express the relationship as a matrix transformation using \textbf{homogeneous coordinates}\footnote{See Appendix \ref{sec:homogeneous}.}, by letting $\widetilde{w} = z_c$.
 \begin{equation} \label{eq:cali}
     \begin{bmatrix}
         z_c u \\ z_c v \\ z_c
@@ -105,9 +107,7 @@ Doing so allows us to express the relationship as a matrix transformation using 
     \eqrestriction{a \in \Real, a \neq 0}
 \end{equation}
 
-The equation includes a non-zero scale factor $a$ because a property of homogenous coordinates is that multiplying the homogenous coordinate of a point by a non-zero scalar still represents the same point. 
-
-Equation \ref{eq:cali} can be represented more simply thus:
+The equation includes a non-zero scale factor $a$ because a property of homogeneous coordinates is that multiplying the homogeneous coordinate of a point by a non-zero scalar still represents the same point. Equation \ref{eq:cali} can be represented more simply thus:
 \begin{gather}
     \widetilde{p}_i = aK\, p_c \label{eq:pi} \eqrestriction{a \in \Real, a \neq 0}
 \end{gather}
@@ -115,7 +115,7 @@ $K$ is known as the \textbf{calibration matrix}. It is a matrix transformation w
 
 \subsection{Extrinsic Parameters} \label{sec:extrinsics}
 
-Extrinsic parameters describe the orientation of the camera. As such, they describe the relationship between the position of a point in the world coordinate frame and its coordinates in camera coordinates.
+Extrinsic parameters describe the orientation of the camera by establishing th relationship between the position of a point in the world coordinate frame and its coordinates in camera coordinates.
 
 There are two possible types of movement affecting the orientation of the camera: rotation and translation. The rotation of the camera can be described using a $3 \times 3$ square matrix:
 \begin{equation}
@@ -147,7 +147,7 @@ From Figure \ref{fig:ext}, we can see that the naive approach to finding the pos
     p_c & = R\,(p_w-c_w) \nonumber \\
         & = R\,p_w -R\,c_w
 \end{align}
-Since the position of the camera $c_w$ is constant, we let $t = -R\,c_w$, and $t$ represents the translation of the camera from the origin.
+Since the position of the camera $c_w$ is constant, we let $t = -R\,c_w$, where $t$ represents the translation of the camera from the origin.
 \begin{equation}
     p_c = R\,p_w + t
 \end{equation}
@@ -170,7 +170,7 @@ This can be equivalently written as thus:
         t_x \\ t_y \\ t_z
     \end{bmatrix}
 \end{equation*}
-We can then combine $R$ and $t$ into an augmented matrix, $[R\,|\,t\,]$, by expressing $p_w$ in homogenous coordinates.
+We can combine $R$ and $t$ into an augmented matrix, $[R\,|\,t\,]$, by expressing $p_w$ in homogeneous coordinates.
 \begin{equation}
     \begin{bmatrix}
         x_c \\ y_c \\ z_c

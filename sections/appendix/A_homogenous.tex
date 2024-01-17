@@ -1,17 +1,13 @@
 \clearpage
-\section{Homogenous Coordinates} \label{sec:homogenous}
-
-The standard Cartesian coordinate system has long served as the foundation for representing points and vectors in Euclidean space. However, certain limitations arise when dealing with transformations, particularly translations and perspective projections, both of which are operations core to this paper. To overcome these challenges, homogenous coordinates are employed.
+\section{Homogeneous Coordinates} \label{sec:homogeneous}
 
 \begin{definition}
-    Given a point $(a_1, a_2, \cdots, a_n) \in \Real^n$, it can be expressed in homogenous coordinates as $(\lambda a_1, \lambda a_2, \cdots, \lambda a_n, \lambda) \in \Real^{n+1}$, where $\lambda \neq 0$ is a constant scale factor. 
+    Given a point $[a_1, a_2, \cdots, a_n]^\T \in \Real^n$, it can be expressed in homogeneous coordinates as $[\lambda a_1, \lambda a_2, \cdots, \lambda a_n, \lambda]^\T \in \Real^{n+1}$, where $\lambda \neq 0$ is a constant scale factor.
 \end{definition}
-
-In other words, we essentially extend the coordinate representation to include an extra dimension
-
+In other words, homogeneous coordinates are a mathematical representation that extends the Cartesian coordinate system by introducing an additional coordinate. Consider the point $[u, v]^\T$ in 2D Euclidean space. We can convert it to homogeneous coordinates by adding a new coordinate, represented by $\widetilde{w}$:
 \begin{equation}
     \begin{bmatrix}
-        u \\ v 
+        u \\ v
     \end{bmatrix}
     \sim
     \begin{bmatrix}
@@ -23,7 +19,13 @@ In other words, we essentially extend the coordinate representation to include a
     \end{bmatrix}
 \end{equation}
 
-One important property of homogenous coordinates is that if the homogenous coordinate of a point is multiplied by a non-zero scalar, the result represents the same point. i.e.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{diagrams/homogeneous}
+    \caption{Homogeneous coordinate system.}\label{fig:homo}
+\end{figure}
+
+One important property of homogeneous coordinates is that if the homogeneous coordinate of a point is multiplied by a non-zero scalar, the result represents the same point, as visualized in Figure \ref{fig:homo}. For example, given the homogeneous point $[\widetilde{u},\widetilde{v},\widetilde{w}]^\T$:
 \begin{equation}
     \begin{bmatrix}
         \widetilde{u} \\ \widetilde{v} \\ \widetilde{w}
@@ -33,11 +35,12 @@ One important property of homogenous coordinates is that if the homogenous coord
     \begin{bmatrix}
         \widetilde{u} \\ \widetilde{v} \\ \widetilde{w}
     \end{bmatrix}
-    \qquad (k \neq 0)
+    \eqrestriction{k \neq 0}
 \end{equation}
+For this reason, homogeneous coordinates are able to simplify and generalize transformations, like translation, rotation, scaling, and perspective projection without the need for separate and complex formulas for each operation.
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.6\textwidth]{diagrams/homogenous}
-    \caption{Homogenous coordinate system.}
-\end{figure}
+
+
+
+
+

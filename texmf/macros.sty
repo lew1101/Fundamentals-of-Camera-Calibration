@@ -32,4 +32,8 @@
 \renewcommand*\do[1]{\nextitem##1}% How to process each item
 \docsvlist{#1}% Process list
 }
+\newcommand\undermat[2]{%
+  \makebox[0pt][l]{$\smash{\underbrace{\phantom{%
+    \begin{matrix}#2\end{matrix}}}_{\text{$#1$}}}$}#2}
+
 

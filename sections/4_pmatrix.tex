@@ -51,6 +51,7 @@ Equivalently:
         x_w^{(n)} \\ y_w^{(n)} \\ z_w^{(n)} \\ 1
     \end{bmatrix}
 \end{equation}
+where $n \in \Natural$ denotes the n\textsuperscript{th} point.
 
 The implications of this equation is very important, as it means that a $3 \times 4$ matrix is sufficient in describing the relationship between a point in the world coordinate frame to its projection onto the image plane in pixel coordinates.
 
@@ -79,10 +80,7 @@ Bringing all the terms onto one side:
         0 = p_{21}x_w^{(n)} + p_{22}y_w^{(n)} + p_{23}z_w^{(n)} + p_{24} - p_{31}v_nx_w^{(n)} - p_{32}v_ny_w^{(n)} - p_{33}v_nz_w^{(n)} - p_{34}v_n
     \end{align}
 \end{subequations}
-
-
-We then need to recognize the fact that these two equations can be joined together to form one matrix equation:
-
+$p$ has 12 degrees of freedom, and since each point generates a distinct set of the two equations above, a minimum of 6 sets of points and their corresponding image projections are necessary in order to solve the system. These equations form a system of equations, which can be rewritten in the form of a matrix equation:
 \setcounter{MaxMatrixCols}{20}
 \begin{equation}
     \scalemath{0.9}{
@@ -106,14 +104,12 @@ We then need to recognize the fact that these two equations can be joined togeth
     }_{\mathlarger{p}}
     }
 \end{equation}
-where $G$ is a $2n \times 12$ matrix, $n \in \Integer^+$, and $p$ is the matrix vectorization of $P$. This system has 12 degrees of freedom, and since each point yields two equations, a minimum of 6 sets of points and their corresponding image projections are necessary in order to solve the system. When using 6 correspondences, a unique solution can be obtained using classical approaches, such as using 
-\textbf{Gaussian elimination}. But since we want to minimize uncertainty and achieve a solution which is as accurate as possible, we want to use as many correspondences as possible. 
-
-When using more the 6 correspondences, we have more equations than unknowns. Such systems are \emph{overdetermined}, and generally have no solutions \footcite{williamsOverdeterminedSystems1990}. However, we can optimize the system and obtain the "best approximate solution" using a method such as the \hyperref[sec:clss]{\textbf{least-squares method}}. 
+where $G$ is a $2n \times 12$ matrix, $n \in \Integer^+$, and $p$ is the matrix vectorization of $P$. When using 6 correspondences, a unique solution can be obtained using classical approaches, such as using 
+\textbf{Gaussian elimination}. But since we want to minimize uncertainty and achieve a solution which is as accurate as possible, we want to use as many correspondences as possible. When using more the 6 correspondences, we have more equations than unknowns. Such systems are \emph{overdetermined}, and generally have no solutions \footcite{williamsOverdeterminedSystems1990}. However, we can optimize the system and obtain the ``best approximate solution'' using a method such as the \hyperref[sec:clss]{\textbf{least-squares method}}. 
 
 \subsection{Constrained Least-Squares Solution} \label{sec:clss}
 
-First, we must clarify what a "best approximate solution" is. 
+First, we must clarify what a ``best approximate solution'' is. 
 \begin{definition}X
     Let $A$ be an $m \times n$ matrix and let $b$ be a vector in $\Real^m$. A \textbf{least-squares solution} of the matrix equation $Ax = b$ is a vector $\widehat{x}$ such that:
     \begin{equation*}
@@ -138,7 +134,7 @@ Returning to our specific problem, we can apply least-squares method by minimizi
 \end{equation*}
 $v^\T$ represents the \emph{transpose} of $v$, i.e. swapping its rows and columns, transforming a row vector into a column vector or vice versa.
 
-However, we need to further constrain the problem since the projection matrix $P$ is applied onto homogenous coordinates, where the property holds that multiplying the homogenous coordinate of a point by a non-zero scalar still represents the same point\footnote{See Appendix \ref{sec:homogenous}.}. This means that there is an infinite amount of solutions, because once we have found a valid solution for $P$, we can always multiply $P$ by a non-zero scalar $k$ and still yield a valid solution, i.e. $P \equiv kP$. As such, any solution for $P$ is only defined to a certain scale factor $k$. To mitigate this, we arbitrarily set the condition that $\Vert p \Vert^2$ must equal 1. Thus:
+However, we need to further constrain the problem since the projection matrix $P$ is applied onto homogeneous coordinates, where the property holds that multiplying the homogeneous coordinate of a point by a non-zero scalar still represents the same point\footnote{See Appendix \ref{sec:homogeneous}.}. This means that there is an infinite amount of solutions, because once we have found a valid solution for $P$, we can always multiply $P$ by a non-zero scalar $k$ and still yield a valid solution, i.e. $P \equiv kP$. As such, any solution for $P$ is only defined to a certain scale factor $k$. To mitigate this, we arbitrarily set the condition that $\Vert p \Vert^2$ must equal 1. Thus:
 \begin{equation*} \label{eq:min1}
     \optmin{p}{\lVert Gp \rVert^2}{\lVert p \rVert^2 = 1}
 \end{equation*}
@@ -157,5 +153,4 @@ where $\lambda \in \mathbb{R}$ is the \emph{Lagrange multiplier}. Since $p$ is m
     \Rightarrow 2G^\T Gp - 2 \lambda p = 0 \nonumber \\
     \Rightarrow G^\T Gp = \lambda p \label{eq:eigen}
 \end{gather}
-
 This equation is in fact in the form of the eigenvalue problem for $G^\T G$. Potential solutions for $p$ are eigenvectors that satisfy equation \ref{eq:eigen}, with the scalar $\lambda \in \mathbb{R}$ as the eigenvalue. Since this is a minimization problem, the best approximate solution to $p$ is the one which has the smallest $\lambda$. \footcite[][2]{ghojoghEigenvalueGeneralized2023}

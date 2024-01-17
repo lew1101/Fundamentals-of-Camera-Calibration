@@ -20,7 +20,7 @@ do
     data_points="${dir}/points.csv"
     graph_title="${camera}"
     log_path="${output_dir}/output.txt"
-    output_path="${output_dir}/graph.png"
+    output_path="${output_dir}/graph.pdf"
 
     echo "\nProcessing $dir\n"
 
