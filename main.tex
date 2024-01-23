@@ -7,14 +7,10 @@
 \graphicspath{{./assets/}}
 \addglobalbib{sources.bib}
 
-% =================================================================
-% Content
-% =================================================================
-
 
 \begin{document} % BEGIN
-\pagestyle{frontmatter}
 
+\pagenumbering{gobble}
 \begin{titlepage}
     \large
 
@@ -45,14 +41,15 @@
 
 \end{titlepage}
 
-% =================================================================
+% =========================
+\pagestyle{frontmatter}
 \pagenumbering{roman}
 \tableofcontents
-% =================================================================
+
+% =========================
 \clearpage
 \pagestyle{mainmatter}
 \pagenumbering{arabic}
-\setcounter{page}{1}
 
 \input{sections/1_intro.tex}
 \input{sections/2_approach.tex}
@@ -61,19 +58,17 @@
 \input{sections/5_extract.tex}
 \input{sections/6_experiment.tex}
 \input{sections/7_conclusion.tex}
-% ================================================================
 
 %TC:ignore
 \section*{Acknowledgements}
 \addcontentsline{toc}{section}{Acknowledgements}
 
 I am very grateful to my EE supervisor for his continual guidance and invaluable pieces of advice during the process of writing this extended essay. Additionally, I would like to express my appreciation to Mr. Auclair for dedicating his time to instruct me on camera operation and familiarizing me with camera settings. I am also indebted to Leon, for his help in operating the laser cutter. Last but not least, I want to thank Aditya for helping me troubleshoot issues that came up when using Adobe Illustrator for creating diagrams used in my paper.
+
+% =========================
 \clearpage
 \pagestyle{backmatter}
-
 \printbibliography[heading=bibintoc]{}
-
-% =================================================================
 
 \clearpage
 \begin{appendices}
