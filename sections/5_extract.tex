@@ -36,11 +36,11 @@ Since $K$ is in the form of an \emph{upper right triangular matrix} and $R$ is a
 
 \subsection{Extracting the Camera Position}
 
-From equation \ref{eq:param}, we see that $-Qc_w$ is equal to the last column of $P$.
+From equation \ref{eq:param}, we see that $-Qc_w$ is equal to the last column of $P$. Thus:
 \begin{gather}
     \begin{bmatrix}
         p_{14} \\ p_{24} \\ p_{34}
-    \end{bmatrix} = -Ac_w   \nonumber \\
+    \end{bmatrix} = -Qc_w   \nonumber \\
     \Rightarrow \boxed{c_w = -Q^{-1}
     \begin{bmatrix}
         p_{14} \\ p_{24} \\ p_{34}
