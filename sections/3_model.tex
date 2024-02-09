@@ -115,7 +115,7 @@ $K$ is known as the \textbf{calibration matrix}. It is a matrix transformation w
 
 \subsection{Extrinsic Parameters} \label{sec:extrinsics}
 
-Extrinsic parameters describe the orientation of the camera by establishing th relationship between the position of a point in the world coordinate frame and its coordinates in camera coordinates.
+Extrinsic parameters describe the orientation of the camera by establishing the relationship between the position of a point in the world coordinate frame and its coordinates in camera coordinates.
 
 There are two possible types of movement affecting the orientation of the camera: rotation and translation. The rotation of the camera can be described using a $3 \times 3$ square matrix:
 \begin{equation}
@@ -128,9 +128,9 @@ There are two possible types of movement affecting the orientation of the camera
 \end{equation}
 \noindent where:
 \begin{itemize}
-    \item Row 1: Unit vector representing $\hat{x}_c$ after rotation.
-    \item Row 2: Unit vector representing $\hat{y}_c$ after rotation.
-    \item Row 3: Unit vector representing $\hat{z}_c$ after rotation.
+    \item \textbf{Row 1}: Unit vector representing $\hat{x}_c$ after rotation.
+    \item \textbf{Row 2}: Unit vector representing $\hat{y}_c$ after rotation.
+    \item \textbf{Row 3}: Unit vector representing $\hat{z}_c$ after rotation.
 \end{itemize}
 
 $R$ is an orthonormal matrix, because the row and column vectors of $R$ have to be orthogonal. Orthonormality is important because it ensures that the scale of vectors do not change (meaning that determinant of $R$ has to be 1) and that the orthogonality between vectors are maintained.

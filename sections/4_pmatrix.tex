@@ -80,7 +80,8 @@ Bringing all the terms onto one side:
         0 = p_{21}x_w^{(n)} + p_{22}y_w^{(n)} + p_{23}z_w^{(n)} + p_{24} - p_{31}v_nx_w^{(n)} - p_{32}v_ny_w^{(n)} - p_{33}v_nz_w^{(n)} - p_{34}v_n
     \end{align}
 \end{subequations}
-$p$ has 12 degrees of freedom, and since each point generates a distinct set of the two equations above, a minimum of 6 sets of points and their corresponding image projections are necessary in order to solve the system. These equations form a system of equations, which can be rewritten in the form of a matrix equation:
+
+The projection matrix $P$ has 12 degrees of freedom, and since each point generates a distinct set of the two equations above, a minimum of 6 sets of points and their corresponding image projections are necessary in order to solve the system. These equations form a system of equations, which can be rewritten in the form of a matrix equation:
 \setcounter{MaxMatrixCols}{20}
 \begin{equation}
     \scalemath{0.9}{
@@ -104,8 +105,7 @@ $p$ has 12 degrees of freedom, and since each point generates a distinct set of 
     }_{\mathlarger{p}}
     }
 \end{equation}
-where $G$ is a $2n \times 12$ matrix, $n \in \Integer^+$, and $p$ is the matrix vectorization of $P$. When using 6 correspondences, a unique solution can be obtained using classical approaches, such as using 
-\textbf{Gaussian elimination}. But since we want to minimize uncertainty and achieve a solution which is as accurate as possible, we want to use as many correspondences as possible. When using more the 6 correspondences, we have more equations than unknowns. Such systems are \emph{overdetermined}, and generally have no solutions \footcite{williamsOverdeterminedSystems1990}. However, we can optimize the system and obtain the ``best approximate solution'' using a method such as the \hyperref[sec:clss]{\textbf{least-squares method}}. 
+where $G$ is a $2n \times 12$ matrix, $n \in \Integer^+$, and $p$ is the matrix vectorization of $P$. When using 6 correspondences, a unique solution can be obtained using classical approaches, such as using Gaussian elimination. But since we want to minimize uncertainty and achieve a solution which is as accurate as possible, we want to use as many correspondences as possible. When using more the 6 correspondences, we have more equations than unknowns. Such systems are \emph{overdetermined}, and generally have no solutions \footcite{williamsOverdeterminedSystems1990}. However, we can optimize the system and obtain the ``best approximate solution'' using a method such as the \hyperref[sec:clss]{\textbf{least-squares method}}. 
 
 \subsection{Constrained Least-Squares Solution} \label{sec:clss}
 
